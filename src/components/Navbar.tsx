@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import "./Navbar.css"; // Pastikan efek ripple dan lainnya ada di sini
+import { useState, useEffect } from "react";
+import "../index.css"; // pastikan path sesuai (bukan './index.css' jika file global)
 
 function Navbar() {
   const [hovered, setHovered] = useState<"signin" | "register" | null>(null);
@@ -13,6 +13,27 @@ function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Ripple Effect Function
+  const createRipple = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const button = event.currentTarget;
+  
+    // Hapus ripple sebelumnya
+    const existingRipple = button.querySelector(".ripple");
+    if (existingRipple) existingRipple.remove();
+  
+    const circle = document.createElement("span");
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
+  
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${event.nativeEvent.offsetX - radius}px`;
+    circle.style.top = `${event.nativeEvent.offsetY - radius}px`;
+    circle.classList.add("ripple");
+  
+    button.appendChild(circle);
+  };
+  
 
   return (
     <nav
@@ -31,32 +52,30 @@ function Navbar() {
       </div>
 
       <div className="flex gap-4 items-center relative w-[200px] h-9">
-        {/* Background animasi */}
+        {/* Animated Background */}
         <div
           className={`absolute h-full w-[90px] rounded-md transition-all duration-500 ease-in-out z-0 bg-secondary`}
           style={{
-            transform:
-              hovered === "register"
-                ? "translateX(104px)"
-                : "translateX(0px)",
+            transform: hovered === "register" ? "translateX(106px)" : "translateX(0px)",
           }}
         />
-s
-        {/* Tombol Sign in */}
+        {/* Sign in Button */}
         <button
           onMouseEnter={() => setHovered("signin")}
           onMouseLeave={() => setHovered(null)}
-          className="relative z-10 w-[90px] h-full rounded-md text-sm font-semibold text-white cursor-pointer overflow-hidden"
+          onClick={createRipple}
+          className="relative z-10 w-[90px] h-full rounded-md text-sm font-semibold text-white cursor-pointer overflow-hidden ripple-btn"
         >
           Sign in
         </button>
 
-        {/* Tombol Register */}
+        {/* Register Button */}
         <button
           onMouseEnter={() => setHovered("register")}
           onMouseLeave={() => setHovered(null)}
-          className="relative z-10 w-[90px] h-full rounded-md text-sm font-semibold text-white cursor-pointer overflow-hidden"
-        >
+          onClick={createRipple}
+  className="ripple-btn relative z-10 w-[90px] h-full rounded-md text-sm font-semibold text-white cursor-pointer overflow-hidden flex items-center justify-center"
+>
           Register
         </button>
       </div>
