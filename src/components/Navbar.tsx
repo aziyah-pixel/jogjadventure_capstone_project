@@ -41,7 +41,7 @@ function Navbar() {
                 : "translateX(0px)",
           }}
         />
-
+s
         {/* Tombol Sign in */}
         <button
           onMouseEnter={() => setHovered("signin")}
