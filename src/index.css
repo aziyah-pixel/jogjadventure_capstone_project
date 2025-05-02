@@ -2,8 +2,50 @@
 @import "tailwindcss";
 
 @theme {
-    --color-primary : #FFF6EF;
-    --color-secondary : #FF6525;
-    --color-third : #3DB3AD;
-    --color-dark : #272444;
+  --color-primary: #FFF6EF;
+  --color-secondary: #FF6525;
+  --color-third: #3DB3AD;
+  --color-dark: #272444;
 }
+
+.ripple-btn {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    z-index: 0;
+  }
+  
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 500ms ease-out;
+    background-color: rgba(255, 255, 255, 0.25); /* Lebih lembut */
+    width: 100px;
+    height: 100px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.7;
+  }
+  
+  @keyframes ripple {
+    to {
+      transform: scale(2.5);
+      opacity: 0;
+    }
+  }
+
+  /* index.css */
+.hero-overlay {
+    background: linear-gradient(120deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5), rgba(0,0,0,0.3));
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  
