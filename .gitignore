@@ -1,0 +1,42 @@
+# Node modules
+node_modules/
+
+# Vite build output
+dist/
+dist-ssr/
+
+# Vite cache
+.vite/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Env files
+.env
+.env.*.local
+*.local
+
+# Editor settings
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# System or unwanted files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
