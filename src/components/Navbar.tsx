@@ -75,7 +75,7 @@ function Navbar() {
           }}
         />
         {/* Sign in Button */}
-        <Link to="/Signin" className="relative z-10 w-[90px] h-full">
+        <Link to="/AuthFrom" className="relative z-10 w-[90px] h-full">
           <button
             onMouseEnter={() => setHovered("signin")}
             onMouseLeave={() => setHovered(null)}
@@ -86,7 +86,7 @@ function Navbar() {
           </button>
         </Link>
         {/* Sign up Button */}
-        <Link to="/Signup" className="relative z-10 w-[90px] h-full">
+        <Link to="/AuthFrom" className="relative z-10 w-[90px] h-full">
           <button
             onMouseEnter={() => setHovered("register")}
             onMouseLeave={() => setHovered(null)}
