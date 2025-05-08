@@ -1,8 +1,10 @@
+import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Explore from './components/Explore';
+import Sigup from './components/Signup'; 
 
-function App() {
+function Home() {
   return (
     <>
       <div
@@ -13,10 +15,17 @@ function App() {
         <Navbar />
         <Hero />
       </div>
-
-
       <Explore />
     </>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/signup" element={<Sigup />} />
+    </Routes>
   );
 }
 
