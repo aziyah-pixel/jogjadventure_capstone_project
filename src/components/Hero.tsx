@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
+
 function Hero() {
   const [placeholderText, setPlaceholderText] = useState("Search...");
   const [searchValue, setSearchValue] = useState("");

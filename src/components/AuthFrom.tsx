@@ -74,7 +74,7 @@ const AuthForm = () => {
       <div className="relative w-[834px] h-[530px] bg-white rounded-[30px] shadow-lg overflow-hidden">
         {/* Sign Up Form */}
         <div
-          className={`absolute sm:w-full top-0 left-0 w-1/2 h-full flex items-center justify-center transition-all duration-700 ease-in-out 
+          className={`absolute top-0 left-0 w-1/2 h-full flex items-center justify-center transition-all duration-700 ease-in-out 
           ${isActive ? "translate-x-full opacity-0 z-10 scale-75 blur-sm" : "z-20 opacity-100 scale-100 blur-0"}`}
         >
           <div className="w-full px-8 text-center">
