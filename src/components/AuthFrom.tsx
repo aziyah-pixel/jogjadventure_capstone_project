@@ -1,169 +1,200 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { FaUser, FaEnvelope, FaLock, FaGoogle, FaFacebookF } from "react-icons/fa";
+
+// Props type for InputField component
+type InputFieldProps = {
+  type: string;
+  placeholder: string;
+  Icon: React.ElementType;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+// Reusable input field component
+const InputField = ({ type, placeholder, Icon, value, onChange }: InputFieldProps) => (
+  <div className="relative w-full focus-within:ring-2 focus-within:ring-secondary rounded-[10px] transition duration-300">
+    <input
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      className="h-11 w-full bg-zinc-300 rounded-[10px] px-4 pr-10 outline-none"
+    />
+    <Icon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600" />
+  </div>
+);
 
 const AuthForm = () => {
   const [isActive, setIsActive] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  // Input state types
+  type AuthData = {
+    username: string;
+    email: string;
+    password: string;
+  };
+
+  const [signInData, setSignInData] = useState<AuthData>({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const [signUpData, setSignUpData] = useState<AuthData>({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const handleSignInSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { username, email, password } = signInData;
+    if (!username || !email || !password) {
+      setHasError(true);
+      setTimeout(() => setHasError(false), 500);
+    } else {
+      console.log("Sign In Data:", signInData);
+    }
+  };
+
+  const handleSignUpSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { username, email, password } = signUpData;
+    if (!username || !email || !password) {
+      setHasError(true);
+      setTimeout(() => setHasError(false), 500);
+    } else {
+      console.log("Sign Up Data:", signUpData);
+    }
+  };
 
   return (
-    <div className="h-[776px] flex justify-center items-center bg-orange-50 ">
-      {/* Ini adalah box */}
-      <div
-        className={
-          "container  w-[834px] h-[491px] relative bg-white rounded-[20px] shadow-[0px_4px_30px_0px_rgba(0,0,0,0.25)] overflow-hidden m-10"
-        }
-      >
-        {/* Ini adalah box sigup*/}
-        <div 
-          className={`max-sm:h-[70%] max-sm:w-full max-sm:bottom-0  w-1/2 h-full z-10 absolute bg-white-500 flex items-center text-center sigup transition duration-600 ease-in-out ${
-            isActive ? "right-[0] invisible max-sm:bottom-[30%] " : "right-[50%]"
-          }`}
+    <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-gray-200 to-secondary/10 font-['Poppins']">
+      <div className="relative w-[834px] h-[530px] bg-white rounded-[30px] shadow-lg overflow-hidden">
+        {/* Sign Up Form */}
+        <div
+          className={`absolute sm:w-full top-0 left-0 w-1/2 h-full flex items-center justify-center transition-all duration-700 ease-in-out 
+          ${isActive ? "translate-x-full opacity-0 z-10 scale-75 blur-sm" : "z-20 opacity-100 scale-100 blur-0"}`}
         >
-          <div className="w-full ">
-            <div className="text-center justify-start m-4 text-black text-3xl font-semibold font-['Poppins']">
-              Sign Up
-            </div>{" "}
-            {/* Ini adalah box-from */}
-            <div className="w-72 relative inline-flex flex-col justify-start items-start gap-6">
-              <div className="self-stretch h-11 bg-zinc-300 rounded-[10px]" />
-              <div className="self-stretch h-11 bg-zinc-300 rounded-[10px]" />
-              <div className="self-stretch h-11 bg-zinc-300 rounded-[10px]" />
-              <div className="w-60 left-[15px] top-[14px] absolute inline-flex justify-between items-center">
-                <div className="opacity-50 justify-start text-black text-base font-normal font-['Poppins']">
-                  Username
-                </div>
-                <div className="w-5 h-5 relative overflow-hidden">
-                  <div className="w-3.5 h-[5px] left-[3.33px] top-[12.50px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                  <div className="w-1.5 h-1.5 left-[6.67px] top-[2.50px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                </div>
-              </div>
-              <div className="w-60 left-[14px] top-[147px] absolute inline-flex justify-between items-center">
-                <div className="opacity-50 justify-start text-black text-base font-normal font-['Poppins']">
-                  Password
-                </div>
-                <div className="w-4 h-4 relative overflow-hidden">
-                  <div className="w-3.5 h-2 left-[2.25px] top-[8.25px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                  <div className="w-2 h-1.5 left-[5.25px] top-[1.50px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                </div>
-              </div>
-              <div className="w-60 left-[15px] top-[80px] absolute inline-flex justify-between items-center">
-                <div className="opacity-50 justify-start text-black text-base font-normal font-['Poppins']">
-                  Email
-                </div>
-                <div className="w-4 h-4 relative overflow-hidden">
-                  <div className="w-3.5 h-3 left-[1.50px] top-[3px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                  <div className="w-3.5 h-1.5 left-[1.50px] top-[4.50px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                </div>
-              </div>
-              <div className="w-72 px-5 py-2.5 bg-orange-500 rounded-[10px] inline-flex justify-center items-center gap-2.5">
-                <div className="justify-start text-white text-base font-normal font-['Poppins']">
-                  Sign Up
-                </div>
-              </div>
-            </div>
-            <div className="justify-start text-orange-500 text-[12px] m-2 font-medium font-['Poppins']">
-              or register with social media platforms
+          <div className="w-full px-8 text-center">
+            <h2 className="text-3xl font-semibold text-black mb-6">Sign Up</h2>
+            <form
+              onSubmit={handleSignUpSubmit}
+              className={`flex flex-col gap-4 items-center ${hasError ? "animate-shake" : ""}`}
+            >
+              <InputField
+                type="text"
+                placeholder="Username"
+                Icon={FaUser}
+                value={signUpData.username}
+                onChange={(e) => setSignUpData({ ...signUpData, username: e.target.value })}
+              />
+              <InputField
+                type="email"
+                placeholder="Email"
+                Icon={FaEnvelope}
+                value={signUpData.email}
+                onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
+              />
+              <InputField
+                type="password"
+                placeholder="Password"
+                Icon={FaLock}
+                value={signUpData.password}
+                onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })}
+              />
+              <button
+                type="submit"
+                className="bg-secondary text-white py-2.5 rounded-[10px] mt-2 w-full cursor-pointer hover:opacity-90 transition"
+              >
+                Sign Up
+              </button>
+            </form>
+            <div className="mt-4 text-sm text-gray-500">or register with</div>
+            <div className="flex justify-center gap-4 mt-2">
+              <button className="bg-red-500 text-white p-3 rounded-full hover:opacity-80 transition">
+                <FaGoogle />
+              </button>
+              <button className="bg-blue-600 text-white p-3 rounded-full hover:opacity-80 transition">
+                <FaFacebookF />
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Ini adalah box sigin*/}
-        <div 
-        className={`w-1/2 h-full z-10 absolute right-0 flex items-center text-center sigin transition duration-600 ease-in-out transition-[visibility] ${
-          isActive ? "right-[0] visible" : "right-[50%] invisible"
-        }`}
+        {/* Sign In Form */}
+        <div
+          className={`absolute top-0 left-0 w-1/2 h-full right-0 flex items-center justify-center transition-all duration-700 ease-in-out 
+          ${isActive ? "z-20 opacity-100 translate-x-full scale-100 blur-0" : "translate-x-0 opacity-0 z-10 scale-75 blur-sm"}`}
         >
-          <div className="w-full">
-            <div className="text-center justify-start m-4 text-black text-3xl font-semibold font-['Poppins']">
-              Sign In
-            </div>{" "}
-            {/* Ini adalah box-from */}
-            <div className="w-72 relative inline-flex flex-col justify-start items-start gap-6">
-              <div className="self-stretch h-11 bg-zinc-300 rounded-[10px]" />
-              <div className="self-stretch h-11 bg-zinc-300 rounded-[10px]" />
-              <div className="self-stretch h-11 bg-zinc-300 rounded-[10px]" />
-              <div className="w-60 left-[15px] top-[14px] absolute inline-flex justify-between items-center">
-                <div className="opacity-50 justify-start text-black text-base font-normal font-['Poppins']">
-                  Username
-                </div>
-                <div className="w-5 h-5 relative overflow-hidden">
-                  <div className="w-3.5 h-[5px] left-[3.33px] top-[12.50px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                  <div className="w-1.5 h-1.5 left-[6.67px] top-[2.50px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                </div>
-              </div>
-              <div className="w-60 left-[14px] top-[147px] absolute inline-flex justify-between items-center">
-                <div className="opacity-50 justify-start text-black text-base font-normal font-['Poppins']">
-                  Password
-                </div>
-                <div className="w-4 h-4 relative overflow-hidden">
-                  <div className="w-3.5 h-2 left-[2.25px] top-[8.25px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                  <div className="w-2 h-1.5 left-[5.25px] top-[1.50px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                </div>
-              </div>
-              <div className="w-60 left-[15px] top-[80px] absolute inline-flex justify-between items-center">
-                <div className="opacity-50 justify-start text-black text-base font-normal font-['Poppins']">
-                  Email
-                </div>
-                <div className="w-4 h-4 relative overflow-hidden">
-                  <div className="w-3.5 h-3 left-[1.50px] top-[3px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                  <div className="w-3.5 h-1.5 left-[1.50px] top-[4.50px] absolute outline outline-2 outline-offset-[-1px] outline-black" />
-                </div>
-              </div>
-              <div className="w-72 px-5 py-2.5 bg-orange-500 rounded-[10px] inline-flex justify-center items-center gap-2.5">
-                <div className="justify-start text-white text-base font-normal font-['Poppins']">
-                  Sign In
-                </div>
-              </div>
-            </div>
-            <div className="justify-start text-orange-500 text-[12px] m-2 font-medium font-['Poppins']">
-              or register with social media platforms
+          <div className="w-full px-8 text-center">
+            <h2 className="text-3xl font-semibold text-black mb-6">Sign In</h2>
+            <form
+              onSubmit={handleSignInSubmit}
+              className={`flex flex-col gap-4 items-center ${hasError ? "animate-shake" : ""}`}
+            >
+              <InputField
+                type="text"
+                placeholder="Username"
+                Icon={FaUser}
+                value={signInData.username}
+                onChange={(e) => setSignInData({ ...signInData, username: e.target.value })}
+              />
+              <InputField
+                type="email"
+                placeholder="Email"
+                Icon={FaEnvelope}
+                value={signInData.email}
+                onChange={(e) => setSignInData({ ...signInData, email: e.target.value })}
+              />
+              <InputField
+                type="password"
+                placeholder="Password"
+                Icon={FaLock}
+                value={signInData.password}
+                onChange={(e) => setSignInData({ ...signInData, password: e.target.value })}
+              />
+              <button
+                type="submit"
+                className="bg-secondary text-white py-2.5 rounded-[10px] mt-2 w-full cursor-pointer hover:opacity-90 transition"
+              >
+                Sign In
+              </button>
+            </form>
+            <div className="mt-4 text-sm text-gray-500">or sign in with</div>
+            <div className="flex justify-center gap-4 mt-2">
+              <button className="bg-red-500 text-white p-3 rounded-full hover:opacity-80 transition">
+                <FaGoogle />
+              </button>
+              <button className="bg-blue-600 text-white p-3 rounded-full hover:opacity-80 transition">
+                <FaFacebookF />
+              </button>
             </div>
           </div>
         </div>
 
+        {/* Toggle Panel */}
         <div
-          className={` max-sm:before:rounded-xl absolute w-full h-full before:content-[] before:absolute before:w-[150%] before:h-full before:bg-orange-500 before:z-20 before:rounded-full before:transition duration-1300 ease-in-out ${
-            isActive ? "left-[-100%]" : "left-[50%]"
-          }`}
-        ></div>
-        <div
-          className={`left absolute w-1/2 h-full  flex flex-col justify-center items-center z-20 transition duration-600 ease-in-out ${
-            isActive ? "left-[0] delay-120" : "left-[-50%] delay-600 "
-          }`}
+          className={`absolute top-0 left-1/2 w-1/2 h-full bg-secondary text-white flex flex-col justify-center items-center text-center transition-all duration-700 ease-in-out z-30 
+          ${isActive ? "-translate-x-full rounded-r-[100px]" : "translate-x-0 rounded-l-[100px]"}`}
         >
-          <div className="justify-start text-white text-3xl font-semibold font-['Poppins']">
-            Welcome Back!
+          <div>
+            <h2 className="text-3xl font-semibold">
+              {isActive ? "Welcome Back!" : "Hello, Friend!"}
+            </h2>
+            <p className="text-sm mt-2">
+              {isActive
+                ? "To keep connected with us please login with your info"
+                : "Enter your details and start your journey with us"}
+            </p>
+            <button
+              onClick={() => setIsActive(!isActive)}
+              className="mt-6 border border-white px-5 py-2.5 rounded-[10px] cursor-pointer hover:bg-white hover:text-secondary transition"
+            >
+              {isActive ? "Sign In" : "Sign Up"}
+            </button>
           </div>
-          <div className=" justify-start text-white text-sm font-medium font-['Poppins']">
-            Already have on account?
-          </div>
-          <button
-            onClick={() => setIsActive(false)}
-            className="w-40 px-5 py-2.5 m-3 rounded-[10px] outline outline-1 outline-offset-[-1px] outline-white inline-flex justify-center items-center gap-2.5"
-          >
-            <div className="sigin-btn justify-start text-white text-base font-normal font-['Poppins']">
-              Sign Up
-            </div>
-          </button>
-        </div>
-
-        <div
-          className={`right  absolute w-1/2 h-full  flex flex-col justify-center items-center z-20 transition duration-600 ease-in-out ${
-            isActive ? "right-[-50%] delay-600" : "right-[0] dela-120"
-          }`}
-        >
-          <div className="justify-start text-white text-3xl font-semibold font-['Poppins']">
-            Welcome Back!
-          </div>
-          <div className=" justify-start text-white text-sm font-medium font-['Poppins']">
-            Already have on account?
-          </div>
-          <button
-            onClick={() => setIsActive(true)}
-            className="w-40 px-5 py-2.5 m-3 rounded-[10px] outline outline-1 outline-offset-[-1px] outline-white inline-flex justify-center items-center gap-2.5"
-          >
-            <div className="signup-btn justify-start text-white text-base font-normal font-['Poppins']">
-              Sign In
-            </div>
-          </button>
         </div>
       </div>
     </div>
