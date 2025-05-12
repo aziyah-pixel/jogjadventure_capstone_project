@@ -71,11 +71,11 @@ const AuthForm = () => {
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-gray-200 to-secondary/10 font-['Poppins']">
-      <div className="relative w-[834px] h-[530px] bg-white rounded-[30px] shadow-lg overflow-hidden">
+      <div className="relative w-[834px] h-[530px] bg-white rounded-[30px] shadow-lg m-2.5 overflow-hidden max-sm:h-[calc(100vh-40px)]">
         {/* Sign Up Form */}
         <div
           className={`absolute top-0 left-0 w-1/2 h-full flex items-center justify-center transition-all duration-700 ease-in-out 
-          ${isActive ? "translate-x-full opacity-0 z-10 scale-75 blur-sm" : "z-20 opacity-100 scale-100 blur-0"}`}
+          ${isActive ? "translate-x-full opacity-0 z-10 scale-75 blur-sm max-sm:translate-y-full" : "z-20 opacity-100 scale-100 blur-0"} max-sm:w-full max-sm:h-[75%]`}
         >
           <div className="w-full px-8 text-center">
             <h2 className="text-3xl font-semibold text-black mb-6">Sign Up</h2>
@@ -125,8 +125,8 @@ const AuthForm = () => {
 
         {/* Sign In Form */}
         <div
-          className={`absolute top-0 left-0 w-1/2 h-full right-0 flex items-center justify-center transition-all duration-700 ease-in-out 
-          ${isActive ? "z-20 opacity-100 translate-x-full scale-100 blur-0" : "translate-x-0 opacity-0 z-10 scale-75 blur-sm"}`}
+          className={`absolute left-0 w-1/2 h-full right-0 flex items-center justify-center transition-all duration-700 ease-in-out 
+          ${isActive ? "z-10 opacity-100 translate-x-full scale-100 blur-0 max-sm:translate-x-0 max-sm:translate-y-14" : "translate-x-0 opacity-0 z-10 scale-75 blur-sm"} max-sm:w-full`}
         >
           <div className="w-full px-8 text-center">
             <h2 className="text-3xl font-semibold text-black mb-6">Sign In</h2>
@@ -176,8 +176,8 @@ const AuthForm = () => {
 
         {/* Toggle Panel */}
         <div
-          className={`absolute top-0 left-1/2 w-1/2 h-full bg-secondary text-white flex flex-col justify-center items-center text-center transition-all duration-700 ease-in-out z-30 
-          ${isActive ? "-translate-x-full rounded-r-[100px]" : "translate-x-0 rounded-l-[100px]"}`}
+          className={`absolute right-0 w-1/2 h-full bg-secondary text-white flex flex-col justify-center items-center text-center transition-all duration-700 ease-in-out z-30 
+          ${isActive ? "-translate-x-0 max-sm:-translate-y-4 max-sm:rounded-b-[100px] max-sm:top-0 rounded-r-[100px]" : "translate-x-full max-sm:translate-y-0 max-sm:translate-x-0 max-sm:rounded-t-[100px] rounded-l-[100px]"} max-sm:h-[30%] max-sm:bottom-0 max-sm:w-full left-0`}
         >
           <div>
             <h2 className="text-3xl font-semibold">
@@ -192,7 +192,7 @@ const AuthForm = () => {
               onClick={() => setIsActive(!isActive)}
               className="mt-6 border border-white px-5 py-2.5 rounded-[10px] cursor-pointer hover:bg-white hover:text-secondary transition"
             >
-              {isActive ? "Sign In" : "Sign Up"}
+              {isActive ? "Sign Up" : "Sign In"}
             </button>
           </div>
         </div>
