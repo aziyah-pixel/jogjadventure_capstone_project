@@ -186,7 +186,7 @@ const AuthForm = () => {
             <p className="text-sm mt-2">
               {isActive
                 ? "To keep connected with us please login with your info"
-                : "Enter your details and start your journey with us"}
+                : "Enter your details and start your journey with"}
             </p>
             <button
               onClick={() => setIsActive(!isActive)}
