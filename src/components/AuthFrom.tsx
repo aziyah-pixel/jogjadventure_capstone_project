@@ -113,10 +113,10 @@ const AuthForm = () => {
             </form>
             <div className="mt-4 text-sm text-gray-500">or register with</div>
             <div className="flex justify-center gap-4 mt-2">
-              <button className="bg-red-500 text-white p-3 rounded-full hover:opacity-80 transition">
+              <button className="bg-red-500 text-white p-3 rounded-full hover:opacity-60 transition cursor-pointer">
                 <FaGoogle />
               </button>
-              <button className="bg-blue-600 text-white p-3 rounded-full hover:opacity-80 transition">
+              <button className="bg-blue-600 text-white p-3 rounded-full hover:opacity-60 transition cursor-pointer">
                 <FaFacebookF />
               </button>
             </div>
