@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Explore from './components/Explore';
-import Sigup from './components/AuthFrom'; 
+import AuthForm from './components/AuthForm';
 
 function Home() {
   return (
@@ -24,7 +24,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/AuthFrom" element={<Sigup />} />
+      <Route path="/AuthForm" element={<AuthForm />} />
     </Routes>
   );
 }
