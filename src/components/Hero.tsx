@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 function Hero() {
   const [placeholderText, setPlaceholderText] = useState("Search...");
   const [searchValue, setSearchValue] = useState("");
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const fullText = "Search beautiful places...";
 
+  // Typing effect for placeholder
   useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
@@ -18,7 +20,33 @@ function Hero() {
     return () => clearInterval(interval);
   }, []);
 
+  // Load recent searches from localStorage
+  useEffect(() => {
+    const storedSearches = JSON.parse(
+      localStorage.getItem("recentSearches") || "[]"
+    );
+    setRecentSearches(storedSearches);
+  }, []);
+
   const handleClear = () => setSearchValue("");
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchValue.trim() !== "") {
+      const newSearch = searchValue.trim();
+      let updatedSearches = [
+        newSearch,
+        ...recentSearches.filter((term) => term !== newSearch),
+      ];
+
+      // Batasi maksimal 5 pencarian terakhir
+      if (updatedSearches.length > 5)
+        updatedSearches = updatedSearches.slice(0, 5);
+
+      localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+      setRecentSearches(updatedSearches);
+      setSearchValue("");
+    }
+  };
 
   return (
     <>
@@ -38,6 +66,7 @@ function Hero() {
             <input
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder={placeholderText}
               className="shadow-lg border border-gray-300 px-5 pr-12 py-3 rounded-full w-full transition-all duration-300 outline-none text-black bg-white placeholder-gray-400 focus:ring-2 focus:ring-secondary hover:shadow-xl"
               name="search"
@@ -177,26 +206,47 @@ function Hero() {
 
               {/* Navigation Arrows */}
               <div className="flex justify-center space-x-4 mt-2">
-                {["M15 19l-7-7 7-7", "M9 5l7 7-7 7"].map((path, idx) => (
-                  <button
-                    key={idx}
-                    className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-gray-50 transition-colors"
+                {/* Left Arrow */}
+                <button
+                  aria-label="Previous"
+                  className="w-12 h-12 cursor-pointer rounded-full bg-white shadow-md ring-1 ring-gray-200 flex items-center justify-center hover:bg-gray-100 hover:shadow-xl transition-all duration-300 group"
+                >
+                  <svg
+                    className="w-6 h-6 text-gray-600 group-hover:text-secondary group-hover:-translate-x-1 transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
-                    <svg
-                      className="w-5 h-5 text-gray-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d={path}
-                      />
-                    </svg>
-                  </button>
-                ))}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                </button>
+
+                {/* Right Arrow */}
+                <button
+                  aria-label="Next"
+                  className="w-12 h-12 cursor-pointer rounded-full bg-white shadow-md ring-1 ring-gray-200 flex items-center justify-center hover:bg-gray-100 hover:shadow-xl transition-all duration-300 group"
+                >
+                  <svg
+                    className="w-6 h-6 text-gray-600 group-hover:text-secondary group-hover:translate-x-1 transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
 
@@ -239,30 +289,30 @@ function Hero() {
       </section>
 
       {/* Recent Searches */}
-      <section className="bg-gray-50 py-14 text-center">
-        <h2 className="text-2xl font-bold text-primary mb-4">
-          Your Recent Searches
-        </h2>
-        <p className="text-gray-500 mb-6">
-          Here are some of the places you have searched
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          {["Malioboro", "Taman Sari", "Wisata Jogja", "Pantai di Jogja"].map(
-            (term, i) => (
+      {recentSearches.length > 0 && (
+        <section className="bg-gray-50 py-14 text-center">
+          <h2 className="text-2xl font-bold text-secondary mb-4">
+            Your Recent Searches
+          </h2>
+          <p className="text-gray-500 mb-6">
+            Here are some of the places you have searched
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            {recentSearches.map((term, i) => (
               <button
                 key={i}
                 className="px-4 py-2 bg-white shadow rounded-full border hover:bg-gray-100 text-sm"
               >
                 {term}
               </button>
-            )
-          )}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Testimoni */}
       <section className="bg-white py-16 px-4 text-center">
-        <h2 className="text-2xl font-bold text-primary mb-4">
+        <h2 className="text-2xl font-bold text-secondary mb-4">
           Testimoni Jogjadventure
         </h2>
         <div className="max-w-2xl mx-auto bg-gray-100 p-6 rounded-xl shadow">
@@ -285,10 +335,10 @@ function Hero() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-16 text-center">
+      <section className="bg-gradient-to-r from-secondary to-red-500 text-white py-16 text-center">
         <h2 className="text-3xl font-bold mb-4">Explore Jogja</h2>
         <p className="mb-6">Yuk temukan destinasi impianmu sekarang juga!</p>
-        <button className="bg-white text-orange-600 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition">
+        <button className="bg-white text-secondary font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition">
           Mulai Jelajah
         </button>
       </section>
