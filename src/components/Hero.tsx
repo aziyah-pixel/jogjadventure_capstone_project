@@ -5,7 +5,70 @@ function Hero() {
   const [placeholderText, setPlaceholderText] = useState("Search...");
   const [searchValue, setSearchValue] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
   const fullText = "Search beautiful places...";
+
+  // Data untuk destinasi
+  const destinations = [
+    {
+      id: 1,
+      name: "Prambanan",
+      image: "/prambanan2.jpg",
+      description:
+        "Ancient Hindu temple complex featuring stunning architecture",
+      size: "large",
+    },
+    {
+      id: 2,
+      name: "Malioboro",
+      image: "/malioboro.jpg",
+      description: "Famous shopping street with local culture",
+      size: "small",
+    },
+    {
+      id: 3,
+      name: "Tugu Jogja",
+      image: "/tugujogja.jpg",
+      description: "Iconic monument representing the spirit of Yogyakarta",
+      size: "small",
+    },
+    {
+      id: 4,
+      name: "Titik Nol Km Jogja",
+      image: "/nolkm.jpg",
+      description: "Historical landmark marking the heart of Yogyakarta",
+      size: "large",
+    },
+    {
+      id: 5,
+      name: "Parangtritis",
+      image: "/parangtritis1.jpg",
+      description: "Beautiful beach with mystical legends",
+      size: "large",
+    },
+    {
+      id: 6,
+      name: "Taman Sari",
+      image: "/tamansari.jpg",
+      description: "Royal garden complex with beautiful pools",
+      size: "small",
+    },
+    {
+      id: 7,
+      name: "Borobudur",
+      image: "/borobudur.jpg",
+      description: "World's largest Buddhist temple complex",
+      size: "large",
+    },
+    {
+      id: 8,
+      name: "Keraton Yogyakarta",
+      image: "/keraton.jpg",
+      description: "Sultan's palace with rich Javanese culture",
+      size: "small",
+    },
+  ];
 
   // Typing effect for placeholder
   useEffect(() => {
@@ -20,12 +83,10 @@ function Hero() {
     return () => clearInterval(interval);
   }, []);
 
-  // Load recent searches from localStorage
+  // Load recent searches from memory (replacing localStorage)
   useEffect(() => {
-    const storedSearches = JSON.parse(
-      localStorage.getItem("recentSearches") || "[]"
-    );
-    setRecentSearches(storedSearches);
+    // Simulated initial data
+    setRecentSearches(["Prambanan", "Borobudur"]);
   }, []);
 
   const handleClear = () => setSearchValue("");
@@ -42,18 +103,48 @@ function Hero() {
       if (updatedSearches.length > 5)
         updatedSearches = updatedSearches.slice(0, 5);
 
-      localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
       setRecentSearches(updatedSearches);
       setSearchValue("");
     }
   };
+
+  // Navigation functions - bergeser satu card per satu
+  const goToPrevious = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setCurrentSlide((prev) =>
+      prev === 0 ? destinations.length - 1 : prev - 1
+    );
+    setTimeout(() => setIsAnimating(false), 600);
+  };
+
+  const goToNext = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setCurrentSlide((prev) =>
+      prev === destinations.length - 1 ? 0 : prev + 1
+    );
+    setTimeout(() => setIsAnimating(false), 600);
+  };
+
+  // Get current set of destinations to display (6 cards starting from currentSlide)
+  const getCurrentDestinations = () => {
+    const result = [];
+    for (let i = 0; i < 6; i++) {
+      const index = (currentSlide + i) % destinations.length;
+      result.push(destinations[index]);
+    }
+    return result;
+  };
+
+  const currentDestinations = getCurrentDestinations();
 
   return (
     <>
       {/* Hero Section */}
       <div
         className="relative w-full h-screen bg-cover bg-center"
-        style={{ backgroundImage: "url('/prambanan.jpg')" }}
+        style={{ backgroundImage: "url('/hero-bg.jpg')" }}
       >
         <div className="flex flex-col justify-center items-center text-center h-full text-white px-4 bg-black/40">
           {/* Search Bar */}
@@ -132,82 +223,136 @@ function Hero() {
           The most beautiful place in Yogyakarta for your holiday
         </p>
 
-        <div className="max-w-6xl mx-auto px-4">
-          {/* Grid Layout */}
-          <div className="grid grid-cols-3 gap-3 h-[780px]">
+        <div className="max-w-6xl mx-auto px-4 overflow-hidden">
+          {/* Grid Layout with Smooth Slide Animation */}
+          <motion.div
+            key={currentSlide}
+            initial={{ x: 100, opacity: 0.8 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -100, opacity: 0.8 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+              duration: 0.6,
+            }}
+            className="grid grid-cols-3 gap-3 h-[780px]"
+          >
             {/* Left Column */}
             <div className="flex flex-col gap-3">
-              {/* Prambanan */}
-              <div className="relative rounded-3xl overflow-hidden shadow-lg group flex-1">
-                <img
-                  src="/prambanan2.jpg"
-                  alt="Prambanan"
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-xl font-bold mb-2">Prambanan</h3>
-                  <p className="text-white/90 text-sm leading-relaxed">
-                    Ancient Hindu temple complex featuring stunning architecture
-                  </p>
-                </div>
-              </div>
+              {/* First Large Card */}
+              {currentDestinations[0] && (
+                <motion.div
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.1, duration: 0.4 }}
+                  className="relative rounded-3xl overflow-hidden shadow-lg group flex-1"
+                >
+                  <img
+                    src={currentDestinations[0].image}
+                    alt={currentDestinations[0].name}
+                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <h3 className="text-xl font-bold mb-2">
+                      {currentDestinations[0].name}
+                    </h3>
+                    <p className="text-white/90 text-sm leading-relaxed">
+                      {currentDestinations[0].description}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
 
-              {/* Malioboro */}
-              <div className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px]">
-                <img
-                  src="/malioboro.jpg"
-                  alt="Malioboro"
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-lg font-bold mb-1">Malioboro</h3>
-                  <p className="text-white/90 text-xs leading-relaxed">
-                    Famous shopping street with local culture
-                  </p>
-                </div>
-              </div>
+              {/* First Small Card */}
+              {currentDestinations[1] && (
+                <motion.div
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                  className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px]"
+                >
+                  <img
+                    src={currentDestinations[1].image}
+                    alt={currentDestinations[1].name}
+                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h3 className="text-lg font-bold mb-1">
+                      {currentDestinations[1].name}
+                    </h3>
+                    <p className="text-white/90 text-xs leading-relaxed">
+                      {currentDestinations[1].description}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
             {/* Middle Column with Navigation Arrows */}
             <div className="flex flex-col gap-3 items-center">
-              {/* Tugu Jogja */}
-              <div className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px] w-full">
-                <img
-                  src="/tugujogja.jpg"
-                  alt="Tugu Jogja"
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-lg font-bold mb-1">Tugu Jogja</h3>
-                  <p className="text-white/90 text-xs leading-relaxed">
-                    Iconic monument representing the spirit of Yogyakarta
-                  </p>
-                </div>
-              </div>
+              {/* Second Small Card */}
+              {currentDestinations[2] && (
+                <motion.div
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.15, duration: 0.4 }}
+                  className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px] w-full"
+                >
+                  <img
+                    src={currentDestinations[2].image}
+                    alt={currentDestinations[2].name}
+                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h3 className="text-lg font-bold mb-1">
+                      {currentDestinations[2].name}
+                    </h3>
+                    <p className="text-white/90 text-xs leading-relaxed">
+                      {currentDestinations[2].description}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
 
-              {/* Titik Nol Km Jogja */}
-              <div className="relative rounded-3xl overflow-hidden shadow-lg group flex-1 max-h-[380px] w-full">
-                <img
-                  src="/nolkm.jpg"
-                  alt="Titik Nol Km Jogja"
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-xl font-bold mb-2">Titik Nol Km Jogja</h3>
-                  <p className="text-white/90 text-sm leading-relaxed">
-                    Historical landmark marking the heart of Yogyakarta
-                  </p>
-                </div>
-              </div>
+              {/* Second Large Card */}
+              {currentDestinations[3] && (
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.25, duration: 0.4 }}
+                  className="relative rounded-3xl overflow-hidden shadow-lg group flex-1 max-h-[380px] w-full"
+                >
+                  <img
+                    src={currentDestinations[3].image}
+                    alt={currentDestinations[3].name}
+                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <h3 className="text-xl font-bold mb-2">
+                      {currentDestinations[3].name}
+                    </h3>
+                    <p className="text-white/90 text-sm leading-relaxed">
+                      {currentDestinations[3].description}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
 
               {/* Navigation Arrows */}
-              <div className="flex justify-center space-x-4 mt-2">
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.35, duration: 0.4 }}
+                className="flex justify-center space-x-4 mt-2"
+              >
                 {/* Left Arrow */}
                 <button
+                  onClick={goToPrevious}
                   aria-label="Previous"
                   className="w-12 h-12 cursor-pointer rounded-full bg-white shadow-md ring-1 ring-gray-200 flex items-center justify-center hover:bg-gray-100 hover:shadow-xl transition-all duration-300 group"
                 >
@@ -227,8 +372,21 @@ function Hero() {
                   </svg>
                 </button>
 
+                {/* Slide Indicator */}
+                <div className="flex items-center space-x-2">
+                  {destinations.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        index === currentSlide ? "bg-secondary" : "bg-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+
                 {/* Right Arrow */}
                 <button
+                  onClick={goToNext}
                   aria-label="Next"
                   className="w-12 h-12 cursor-pointer rounded-full bg-white shadow-md ring-1 ring-gray-200 flex items-center justify-center hover:bg-gray-100 hover:shadow-xl transition-all duration-300 group"
                 >
@@ -247,44 +405,62 @@ function Hero() {
                     />
                   </svg>
                 </button>
-              </div>
+              </motion.div>
             </div>
 
             {/* Right Column */}
             <div className="flex flex-col gap-3">
-              {/* Parangtritis */}
-              <div className="relative rounded-3xl overflow-hidden shadow-lg group flex-1">
-                <img
-                  src="/parangtritis1.jpg"
-                  alt="Parangtritis"
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-xl font-bold mb-2">Parangtritis</h3>
-                  <p className="text-white/90 text-sm leading-relaxed">
-                    Beautiful beach with mystical legends
-                  </p>
-                </div>
-              </div>
+              {/* Third Large Card */}
+              {currentDestinations[4] && (
+                <motion.div
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.4 }}
+                  className="relative rounded-3xl overflow-hidden shadow-lg group flex-1"
+                >
+                  <img
+                    src={currentDestinations[4].image}
+                    alt={currentDestinations[4].name}
+                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <h3 className="text-xl font-bold mb-2">
+                      {currentDestinations[4].name}
+                    </h3>
+                    <p className="text-white/90 text-sm leading-relaxed">
+                      {currentDestinations[4].description}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
 
-              {/* Taman Sari */}
-              <div className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px]">
-                <img
-                  src="/tamansari.jpg"
-                  alt="Taman Sari"
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-lg font-bold mb-1">Taman Sari</h3>
-                  <p className="text-white/90 text-xs leading-relaxed">
-                    Royal garden complex with beautiful pools
-                  </p>
-                </div>
-              </div>
+              {/* Third Small Card */}
+              {currentDestinations[5] && (
+                <motion.div
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.4 }}
+                  className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px]"
+                >
+                  <img
+                    src={currentDestinations[5].image}
+                    alt={currentDestinations[5].name}
+                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h3 className="text-lg font-bold mb-1">
+                      {currentDestinations[5].name}
+                    </h3>
+                    <p className="text-white/90 text-xs leading-relaxed">
+                      {currentDestinations[5].description}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -301,7 +477,7 @@ function Hero() {
             {recentSearches.map((term, i) => (
               <button
                 key={i}
-                className="px-4 py-2 bg-white shadow rounded-full border hover:bg-gray-100 text-sm"
+                className="px-4 py-2 cursor-pointer bg-white shadow rounded-full border hover:bg-gray-200 text-sm"
               >
                 {term}
               </button>
@@ -334,13 +510,43 @@ function Hero() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-secondary to-red-500 text-white py-16 text-center">
-        <h2 className="text-3xl font-bold mb-4">Explore Jogja</h2>
-        <p className="mb-6">Yuk temukan destinasi impianmu sekarang juga!</p>
-        <button className="bg-white text-secondary font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition">
-          Mulai Jelajah
-        </button>
+      {/* Hero Section - Explore Jogja */}
+      <section className="relative bg-gradient-to-r from-orange-500 to-red-500 text-white py-16 overflow-hidden rounded-2xl">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-40"
+          style={{
+            backgroundImage: "url('/hero-bg.jpg')",
+          }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 text-center px-8">
+          <h2 className="text-3xl font-bold mb-4">Explore Jogja</h2>
+          <p className="mb-6">Yuk temukan destinasi impianmu sekarang juga!</p>
+          <button className="bg-white text-orange-600 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition">
+            Mulai Jelajah
+          </button>
+        </div>
+
+        {/* Navigation Arrow */}
+        <div className="absolute right-8 top-1/2 transform -translate-y-1/2">
+          <button className="bg-white/20 backdrop-blur-sm rounded-full p-3 hover:bg-white/30 transition-all duration-300 group">
+            <svg
+              className="w-6 h-6 text-white group-hover:translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
       </section>
     </>
   );
