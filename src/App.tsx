@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Explore from './components/Explore';
 import AuthForm from './components/AuthForm';
 
 function Home() {
@@ -15,7 +14,7 @@ function Home() {
         <Navbar />
         <Hero />
       </div>
-      <Explore />
+
     </>
   );
 }
