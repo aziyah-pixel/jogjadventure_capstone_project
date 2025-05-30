@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import Destination from './Destination';
 import Testimonial from './Testimonial';
 import Explore from './Explore';
+import Footer from "./Footer";
+import Rekomendasi from "./Rekomendasi";
 
 
 function Hero() {
@@ -153,6 +155,8 @@ function Hero() {
       <Testimonial />
 
       <Explore />
+      <Rekomendasi/>
+      <Footer />
     </>
   );
 }
