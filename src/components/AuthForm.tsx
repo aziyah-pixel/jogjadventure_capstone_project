@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaEnvelope, FaLock, FaGoogle, FaFacebookF } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
+import Navbar from "./Navbar"; // Import navbar Anda
 import "../index.css";
 
 // Props type for InputField component
@@ -86,144 +87,163 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-gray-200 to-secondary/10 font-['Poppins']">
-      <div className="relative w-[834px] h-[530px] bg-white rounded-[30px] shadow-lg m-2.5 overflow-hidden max-sm:h-[calc(100vh-40px)]">
-        {/* Sign Up Form */}
-        <div
-          className={`absolute top-0 left-0 w-1/2 h-full flex items-center justify-center transition-all duration-700 ease-in-out 
-          ${
-            isActive
-              ? "translate-x-full opacity-0 z-10 scale-75 blur-sm max-sm:translate-y-full"
-              : "z-20 opacity-100 scale-100 blur-0"
-          } max-sm:w-full max-sm:h-[75%]`}
-        >
-          <div className="w-full px-8 text-center">
-            <h2 className="text-3xl font-semibold text-black mb-6">Sign Up</h2>
-            <form
-              onSubmit={handleSignUpSubmit}
-              className={`flex flex-col gap-4 items-center ${
-                hasError ? "animate-shake" : ""
-              }`}
-            >
-              <InputField
-                type="email"
-                placeholder="Email"
-                Icon={FaEnvelope}
-                value={signUpData.email}
-                onChange={(e) =>
-                  setSignUpData({ ...signUpData, email: e.target.value })
-                }
-              />
-              <InputField
-                type="password"
-                placeholder="Password"
-                Icon={FaLock}
-                value={signUpData.password}
-                onChange={(e) =>
-                  setSignUpData({ ...signUpData, password: e.target.value })
-                }
-              />
-              <button
-                type="submit"
-                className="bg-secondary text-white py-2.5 rounded-[10px] mt-2 w-full cursor-pointer hover:opacity-90 transition"
-              >
+    <div className="min-h-screen font-['Poppins']">
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Main Content with Background */}
+      <div
+        className="min-h-screen flex justify-center items-center relative"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/parangtritis1.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <div className="relative w-[834px] h-[530px] bg-white/95 backdrop-blur-sm rounded-[30px] shadow-xl m-2.5 overflow-hidden max-sm:h-[calc(100vh-120px)]">
+          {/* Sign Up Form */}
+          <div
+            className={`absolute top-0 left-0 w-1/2 h-full flex items-center justify-center transition-all duration-700 ease-in-out 
+            ${
+              isActive
+                ? "translate-x-full opacity-0 z-10 scale-75 blur-sm max-sm:translate-y-full"
+                : "z-20 opacity-100 scale-100 blur-0"
+            } max-sm:w-full max-sm:h-[75%]`}
+          >
+            <div className="w-full px-8 text-center">
+              <h2 className="text-3xl font-semibold text-black mb-6">
                 Sign Up
-              </button>
-            </form>
-            <div className="mt-4 text-sm text-gray-500">or register with</div>
-            <div className="flex justify-center gap-4 mt-2">
-              <button className="bg-red-500 text-white p-3 rounded-full hover:opacity-60 transition cursor-pointer">
-                <FaGoogle />
-              </button>
-              <button className="bg-blue-600 text-white p-3 rounded-full hover:opacity-60 transition cursor-pointer">
-                <FaFacebookF />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Sign In Form */}
-        <div
-          className={`absolute left-0 w-1/2 h-full right-0 flex items-center justify-center transition-all duration-700 ease-in-out 
-          ${
-            isActive
-              ? "z-10 opacity-100 translate-x-full scale-100 blur-0 max-sm:translate-x-0 max-sm:translate-y-14"
-              : "translate-x-0 opacity-0 z-10 scale-75 blur-sm"
-          } max-sm:w-full`}
-        >
-          <div className="w-full px-8 text-center">
-            <h2 className="text-3xl font-semibold text-black mb-6">Sign In</h2>
-            <form
-              onSubmit={handleSignInSubmit}
-              className={`flex flex-col gap-4 items-center ${
-                hasError ? "animate-shake" : ""
-              }`}
-            >
-              <InputField
-                type="email"
-                placeholder="Email"
-                Icon={FaEnvelope}
-                value={signInData.email}
-                onChange={(e) =>
-                  setSignInData({ ...signInData, email: e.target.value })
-                }
-              />
-              <InputField
-                type="password"
-                placeholder="Password"
-                Icon={FaLock}
-                value={signInData.password}
-                onChange={(e) =>
-                  setSignInData({ ...signInData, password: e.target.value })
-                }
-              />
-              <button
-                type="submit"
-                className="bg-secondary text-white py-2.5 rounded-[10px] mt-2 w-full cursor-pointer hover:opacity-90 transition"
+              </h2>
+              <form
+                onSubmit={handleSignUpSubmit}
+                className={`flex flex-col gap-4 items-center ${
+                  hasError ? "animate-shake" : ""
+                }`}
               >
-                Sign In
-              </button>
-            </form>
-            <div className="mt-4 text-sm text-gray-500">or sign in with</div>
-            <div className="flex justify-center gap-4 mt-2">
-              <button className="bg-red-500 text-white p-3 rounded-full hover:opacity-60 transition cursor-pointer">
-                <FaGoogle />
-              </button>
-              <button className="bg-blue-600 text-white p-3 rounded-full hover:opacity-60 transition cursor-pointer">
-                <FaFacebookF />
-              </button>
+                <InputField
+                  type="email"
+                  placeholder="Email"
+                  Icon={FaEnvelope}
+                  value={signUpData.email}
+                  onChange={(e) =>
+                    setSignUpData({ ...signUpData, email: e.target.value })
+                  }
+                />
+                <InputField
+                  type="password"
+                  placeholder="Password"
+                  Icon={FaLock}
+                  value={signUpData.password}
+                  onChange={(e) =>
+                    setSignUpData({ ...signUpData, password: e.target.value })
+                  }
+                />
+                <button
+                  type="submit"
+                  className="bg-secondary text-white py-2.5 rounded-[10px] mt-2 w-full cursor-pointer hover:opacity-90 transition"
+                >
+                  Sign Up
+                </button>
+              </form>
+              <div className="mt-4 text-sm text-gray-500">or register with</div>
+              <div className="flex justify-center gap-4 mt-2">
+                <button className="bg-red-500 text-white p-3 rounded-full hover:opacity-60 transition cursor-pointer">
+                  <FaGoogle />
+                </button>
+                <button className="bg-blue-600 text-white p-3 rounded-full hover:opacity-60 transition cursor-pointer">
+                  <FaFacebookF />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Toggle Panel */}
-        <div
-          className={`absolute right-0 w-1/2 h-full bg-secondary text-white flex flex-col justify-center items-center text-center transition-all duration-700 ease-in-out z-30 
-          ${
-            isActive
-              ? "-translate-x-0 max-sm:-translate-y-4 max-sm:rounded-b-[100px] max-sm:top-0 rounded-r-[100px]"
-              : "translate-x-full max-sm:translate-y-0 max-sm:translate-x-0 max-sm:rounded-t-[100px] rounded-l-[100px]"
-          } max-sm:h-[30%] max-sm:bottom-0 max-sm:w-full left-0`}
-        >
-          <div>
-            <h2 className="text-3xl font-semibold">
-              {isActive ? "Welcome Back!" : "Hello, Friend!"}
-            </h2>
-            <p className="text-sm mt-2">
-              {isActive
-                ? "To keep connected with us please login with your info"
-                : "Enter your details and start your journey with"}
-            </p>
-            <button
-              onClick={() => {
-                const newMode = isActive ? "signup" : "signin";
-                setSearchParams({ mode: newMode });
-                setIsActive(!isActive);
-              }}
-              className="mt-6 border border-white px-5 py-2.5 rounded-[10px] cursor-pointer hover:bg-white hover:text-secondary transition"
-            >
-              {isActive ? "Sign Up" : "Sign In"}
-            </button>
+          {/* Sign In Form */}
+          <div
+            className={`absolute left-0 w-1/2 h-full right-0 flex items-center justify-center transition-all duration-700 ease-in-out 
+            ${
+              isActive
+                ? "z-10 opacity-100 translate-x-full scale-100 blur-0 max-sm:translate-x-0 max-sm:translate-y-14"
+                : "translate-x-0 opacity-0 z-10 scale-75 blur-sm"
+            } max-sm:w-full`}
+          >
+            <div className="w-full px-8 text-center">
+              <h2 className="text-3xl font-semibold text-black mb-6">
+                Sign In
+              </h2>
+              <form
+                onSubmit={handleSignInSubmit}
+                className={`flex flex-col gap-4 items-center ${
+                  hasError ? "animate-shake" : ""
+                }`}
+              >
+                <InputField
+                  type="email"
+                  placeholder="Email"
+                  Icon={FaEnvelope}
+                  value={signInData.email}
+                  onChange={(e) =>
+                    setSignInData({ ...signInData, email: e.target.value })
+                  }
+                />
+                <InputField
+                  type="password"
+                  placeholder="Password"
+                  Icon={FaLock}
+                  value={signInData.password}
+                  onChange={(e) =>
+                    setSignInData({ ...signInData, password: e.target.value })
+                  }
+                />
+                <button
+                  type="submit"
+                  className="bg-secondary text-white py-2.5 rounded-[10px] mt-2 w-full cursor-pointer hover:opacity-90 transition"
+                >
+                  Sign In
+                </button>
+              </form>
+              <div className="mt-4 text-sm text-gray-500">or sign in with</div>
+              <div className="flex justify-center gap-4 mt-2">
+                <button className="bg-red-500 text-white p-3 rounded-full hover:opacity-60 transition cursor-pointer">
+                  <FaGoogle />
+                </button>
+                <button className="bg-blue-600 text-white p-3 rounded-full hover:opacity-60 transition cursor-pointer">
+                  <FaFacebookF />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Toggle Panel */}
+          <div
+            className={`absolute right-0 w-1/2 h-full bg-secondary text-white flex flex-col justify-center items-center text-center transition-all duration-700 ease-in-out z-30 
+            ${
+              isActive
+                ? "-translate-x-0 max-sm:-translate-y-4 max-sm:rounded-b-[100px] max-sm:top-0 rounded-r-[100px]"
+                : "translate-x-full max-sm:translate-y-0 max-sm:translate-x-0 max-sm:rounded-t-[100px] rounded-l-[100px]"
+            } max-sm:h-[30%] max-sm:bottom-0 max-sm:w-full left-0`}
+          >
+            <div>
+              <h2 className="text-3xl font-semibold">
+                {isActive ? "Welcome Back!" : "Hello, Friend!"}
+              </h2>
+              <p className="text-sm mt-2">
+                {isActive
+                  ? "To keep connected with us please login with your info"
+                  : "Enter your details and start your journey with"}
+              </p>
+              <button
+                onClick={() => {
+                  const newMode = isActive ? "signup" : "signin";
+                  setSearchParams({ mode: newMode });
+                  setIsActive(!isActive);
+                }}
+                className="mt-6 border border-white px-5 py-2.5 rounded-[10px] cursor-pointer hover:bg-white hover:text-secondary transition"
+              >
+                {isActive ? "Sign Up" : "Sign In"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

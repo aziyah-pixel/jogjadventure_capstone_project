@@ -511,41 +511,46 @@ function Hero() {
       </section>
 
       {/* Hero Section - Explore Jogja */}
-      <section className="relative bg-gradient-to-r from-orange-500 to-red-500 text-white py-16 overflow-hidden rounded-2xl">
-        {/* Background Image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-40"
-          style={{
-            backgroundImage: "url('/hero-bg.jpg')",
-          }}
-        />
+      <section className="relative bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 text-white overflow-hidden shadow-2xl">
+        {/* Inner Container */}
+        <div className="relative h-55 w m-18">
+          {/* Background Image Container */}
+          <div className="absolute inset-0 bg-gray-800  rounded-2xl overflow-hidden">
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/tugujogja.jpg')",
+              }}
+            />
+          </div>
 
-        {/* Content */}
-        <div className="relative z-10 text-center px-8">
-          <h2 className="text-3xl font-bold mb-4">Explore Jogja</h2>
-          <p className="mb-6">Yuk temukan destinasi impianmu sekarang juga!</p>
-          <button className="bg-white text-orange-600 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition">
-            Mulai Jelajah
-          </button>
-        </div>
+          {/* Content Overlay */}
+          <div className="relative z-10 h-full flex items-center justify-between px-8">
+            {/* Left Content */}
+            <div className="text-left">
+              <h2 className="text-4xl font-bold mb-2">Explore Jogja</h2>
+            </div>
 
-        {/* Navigation Arrow */}
-        <div className="absolute right-8 top-1/2 transform -translate-y-1/2">
-          <button className="bg-white/20 backdrop-blur-sm rounded-full p-3 hover:bg-white/30 transition-all duration-300 group">
-            <svg
-              className="w-6 h-6 text-white group-hover:translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+            {/* Navigation Arrow */}
+            <div className="flex-shrink-0">
+              <button className="bg-white/20 cursor-pointer backdrop-blur-sm rounded-full p-4 hover:bg-white/30 transition-all duration-300 group border border-white/20">
+                <svg
+                  className="w-8 h-8 text-white group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       </section>
     </>
