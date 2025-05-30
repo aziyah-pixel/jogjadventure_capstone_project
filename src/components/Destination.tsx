@@ -100,7 +100,6 @@ function Destination() {
   
     return (
       <>
-  
         <section className="bg-gradient-to-b from-pink-50 to-white py-16 text-center">
           <h2 className="text-4xl font-bold text-teal-600 mb-2">
             Popular Destinations
@@ -125,7 +124,7 @@ function Destination() {
               className="grid grid-cols-3 gap-3 h-[780px]"
             >
               {/* Left Column */}
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 cursor-pointer">
                 {/* First Large Card */}
                 {currentDestinations[0] && (
                   <motion.div
@@ -178,7 +177,7 @@ function Destination() {
               </div>
   
               {/* Middle Column with Navigation Arrows */}
-              <div className="flex flex-col gap-3 items-center">
+              <div className="flex flex-col gap-3 items-center cursor-pointer">
                 {/* Second Small Card */}
                 {currentDestinations[2] && (
                   <motion.div
@@ -295,7 +294,7 @@ function Destination() {
               </div>
   
               {/* Right Column */}
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 cursor-pointer">
                 {/* Third Large Card */}
                 {currentDestinations[4] && (
                   <motion.div

@@ -151,11 +151,9 @@ function Hero() {
           </div>
         </section>
       )}
-
-      <Testimonial />
-
-      <Explore />
       <Rekomendasi/>
+      <Testimonial />
+      <Explore />
       <Footer />
     </>
   );

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../index.css"; // pastikan path sesuai (bukan './index.css' jika file global)
+import "../index.css"; 
 import { Link } from "react-router-dom";
 
 function Navbar() {
@@ -52,7 +52,7 @@ function Navbar() {
           Home
         </a>
         <a
-          href="#explore"
+          href="#Explore"
           className="cursor-pointer hover:text-secondary transition"
         >
           Explore
