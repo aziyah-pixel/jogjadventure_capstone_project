@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Destination() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -127,6 +128,7 @@ function Destination() {
               <div className="flex flex-col gap-3 cursor-pointer">
                 {/* First Large Card */}
                 {currentDestinations[0] && (
+                  <Link to={`/destination/${currentDestinations[0].id}`} className="relative flex-1">
                   <motion.div
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -148,10 +150,12 @@ function Destination() {
                       </p>
                     </div>
                   </motion.div>
+                  </Link>
                 )}
   
                 {/* First Small Card */}
                 {currentDestinations[1] && (
+                   <Link to={`/destination/${currentDestinations[1].id}`} className="flex-1">
                   <motion.div
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -173,6 +177,7 @@ function Destination() {
                       </p>
                     </div>
                   </motion.div>
+                  </Link>
                 )}
               </div>
   
@@ -180,6 +185,7 @@ function Destination() {
               <div className="flex flex-col gap-3 items-center cursor-pointer">
                 {/* Second Small Card */}
                 {currentDestinations[2] && (
+                   <Link to={`/destination/${currentDestinations[2].id}`} className="flex-1">
                   <motion.div
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -201,9 +207,11 @@ function Destination() {
                       </p>
                     </div>
                   </motion.div>
+                  </Link>
                 )}
   
                 {/* Second Large Card */}
+                <Link to={`/destination/${currentDestinations[3].id}`} className="flex-1">
                 {currentDestinations[3] && (
                   <motion.div
                     initial={{ y: 20, opacity: 0 }}
@@ -227,6 +235,7 @@ function Destination() {
                     </div>
                   </motion.div>
                 )}
+                </Link>
   
                 {/* Navigation Arrows */}
                 <motion.div
@@ -297,6 +306,7 @@ function Destination() {
               <div className="flex flex-col gap-3 cursor-pointer">
                 {/* Third Large Card */}
                 {currentDestinations[4] && (
+                   <Link to={`/destination/${currentDestinations[4].id}`} className="flex-1">
                   <motion.div
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -318,10 +328,12 @@ function Destination() {
                       </p>
                     </div>
                   </motion.div>
+                  </Link>
                 )}
   
                 {/* Third Small Card */}
                 {currentDestinations[5] && (
+                   <Link to={`/destination/${currentDestinations[5].id}`} className="flex-1">
                   <motion.div
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -343,6 +355,7 @@ function Destination() {
                       </p>
                     </div>
                   </motion.div>
+                  </Link>
                 )}
               </div>
             </motion.div>
