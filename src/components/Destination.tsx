@@ -31,7 +31,7 @@ function DestinationApp() {
   const [currentView, setCurrentView] = useState<"list" | "detail">("list");
   const [selectedDestination, setSelectedDestination] = useState<Destination | null>(null);
 
-  const destinations: Destination[] = [
+  const destination: Destination[] = [
     {
       id: 1,
       name: "Candi Borobudur",
@@ -231,7 +231,7 @@ function DestinationApp() {
     { id: "adventure", name: "Petualangan", icon: "⛰️" }
   ];
 
-  const filteredDestinations = destinations.filter(dest => {
+  const filteredDestination = destination.filter(dest => {
     const matchesSearch = dest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          dest.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "all" || dest.category === selectedCategory;
@@ -306,9 +306,9 @@ function DestinationApp() {
           </div>
         </div>
 
-        {/* Destinations Grid */}
+        {/* Destination Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredDestinations.map(destination => (
+          {filteredDestination.map(destination => (
             <div key={destination.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105">
               <div className="relative">
                 <img
@@ -360,7 +360,7 @@ function DestinationApp() {
         </div>
 
         {/* No Results */}
-        {filteredDestinations.length === 0 && (
+        {filteredDestination.length === 0 && (
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">🔍</div>
             <h3 className="text-xl font-semibold text-gray-600 mb-2">Destinasi tidak ditemukan</h3>
