@@ -35,5 +35,18 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1"
-  }
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Musyaffaa2/jogjadventure_capstone_project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Musyaffaa2/jogjadventure_capstone_project/issues"
+  },
+  "homepage": "https://github.com/Musyaffaa2/jogjadventure_capstone_project#readme"
 }

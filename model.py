@@ -2,7 +2,7 @@ from google import genai
 from google.genai import types
 import base64
 import os
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "capstone-20841-f6ef42f0b504.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"capstone-20841-f6ef42f0b504.json"
 
 def generate():
   client = genai.Client(
