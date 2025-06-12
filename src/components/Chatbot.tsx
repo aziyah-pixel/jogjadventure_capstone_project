@@ -57,7 +57,7 @@ const Chatbot = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-secondary text-white p-4 rounded-full shadow-lg hover:scale-105 transition-transform"
+          className="cursor-pointer bg-secondary text-white p-4 rounded-full shadow-lg hover:scale-105 transition-transform"
         >
           <FaRobot size={24} />
         </button>
@@ -73,7 +73,7 @@ const Chatbot = () => {
               <h3 className="font-semibold text-sm">JogjaBot Assistant</h3>
             </div>
             <button onClick={() => setIsOpen(false)}>
-              <FaTimes className="text-white hover:text-gray-300" />
+              <FaTimes className="text-white hover:text-gray-300 cursor-pointer" />
             </button>
           </div>
 
