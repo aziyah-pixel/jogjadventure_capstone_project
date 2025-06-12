@@ -5,6 +5,7 @@ import Testimonial from './Testimonial';
 import Explore from './Explore';
 import Footer from "./Footer";
 import Rekomendasi from "./Rekomendasi";
+import DestinationCard from "./DestinationCard";
 
 
 function Hero() {
@@ -155,6 +156,7 @@ function Hero() {
       <Testimonial />
       <Explore />
       <Footer />
+      <DestinationCard/>
     </>
   );
 }
