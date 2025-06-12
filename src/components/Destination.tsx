@@ -101,7 +101,7 @@ function Destination() {
   
     return (
       <>
-        <section className="bg-gradient-to-b from-pink-50 to-white py-16 text-center">
+        <section className="bg-white py-20 text-center min-h-screen">
           <h2 className="text-4xl font-bold text-teal-600 mb-2">
             Popular Destinations
           </h2>
@@ -122,7 +122,7 @@ function Destination() {
                 damping: 30,
                 duration: 0.6,
               }}
-              className="grid grid-cols-3 gap-3 h-[780px]"
+              className="grid grid-cols-3 gap-3 h-[780px] mb-8"
             >
               {/* Left Column */}
               <div className="flex flex-col gap-3">
@@ -248,70 +248,6 @@ function Destination() {
                     </motion.div>
                   </Link>
                 )}
-  
-                {/* Navigation Arrows */}
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.35, duration: 0.4 }}
-                  className="flex justify-center space-x-4 mt-2"
-                >
-                  {/* Left Arrow */}
-                  <button
-                    onClick={goToPrevious}
-                    aria-label="Previous"
-                    className="w-12 h-12 cursor-pointer rounded-full bg-white shadow-md ring-1 ring-gray-200 flex items-center justify-center hover:bg-gray-100 hover:shadow-xl transition-all duration-300 group"
-                  >
-                    <svg
-                      className="w-6 h-6 text-gray-600 group-hover:text-secondary group-hover:-translate-x-1 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                  </button>
-  
-                  {/* Slide Indicator */}
-                  <div className="flex items-center space-x-2">
-                    {destinations.map((_, index) => (
-                      <div
-                        key={index}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                          index === currentSlide ? "bg-secondary" : "bg-gray-300"
-                        }`}
-                      />
-                    ))}
-                  </div>
-  
-                  {/* Right Arrow */}
-                  <button
-                    onClick={goToNext}
-                    aria-label="Next"
-                    className="w-12 h-12 cursor-pointer rounded-full bg-white shadow-md ring-1 ring-gray-200 flex items-center justify-center hover:bg-gray-100 hover:shadow-xl transition-all duration-300 group"
-                  >
-                    <svg
-                      className="w-6 h-6 text-gray-600 group-hover:text-secondary group-hover:translate-x-1 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
-                </motion.div>
               </div>
   
               {/* Right Column */}
@@ -377,8 +313,72 @@ function Destination() {
                 )}
               </div>
             </motion.div>
-          </div>
-        </section>
+
+            {/* Navigation Arrows - Moved outside the motion.div */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.35, duration: 0.4 }}
+              className="flex justify-center items-center space-x-4 mt-8 pb-8"
+            >
+              {/* Left Arrow */}
+              <button
+                onClick={goToPrevious}
+                aria-label="Previous"
+                className="w-12 h-12 cursor-pointer rounded-full bg-white shadow-md ring-1 ring-gray-200 flex items-center justify-center hover:bg-gray-100 hover:shadow-xl transition-all duration-300 group"
+              >
+                <svg
+                  className="w-6 h-6 text-gray-600 group-hover:text-teal-600 group-hover:-translate-x-1 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+
+              {/* Slide Indicator */}
+              <div className="flex items-center space-x-2">
+                {destinations.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      index === currentSlide ? "bg-teal-600" : "bg-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Right Arrow */}
+              <button
+                onClick={goToNext}
+                aria-label="Next"
+                className="w-12 h-12 cursor-pointer rounded-full bg-white shadow-md ring-1 ring-gray-200 flex items-center justify-center hover:bg-gray-100 hover:shadow-xl transition-all duration-300 group"
+              >
+                <svg
+                  className="w-6 h-6 text-gray-600 group-hover:text-teal-600 group-hover:translate-x-1 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+                </button>
+              </motion.div>
+            </div>
+          </section>
        
       </>
     );

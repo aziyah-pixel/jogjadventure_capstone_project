@@ -52,7 +52,7 @@ const DestinationCard = () => {
   // Mock additional images for gallery
   const galleryImages = [
     destination.image,
-    destination.image, // In real app, you'd have different images
+    destination.image, 
     destination.image,
     destination.image,
   ];
