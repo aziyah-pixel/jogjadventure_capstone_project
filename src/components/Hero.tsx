@@ -127,8 +127,9 @@ function Hero() {
           </motion.p>
         </div>
       </div>
-
+      
       <Destination />
+      <Rekomendasi/>
 
       {/* Recent Searches */}
       {recentSearches.length > 0 && (
@@ -151,8 +152,8 @@ function Hero() {
           </div>
         </section>
       )}
-      <Rekomendasi/>
-      <Testimonial />
+      
+      <Testimonial/>
       <Explore />
       <Footer />
     </>

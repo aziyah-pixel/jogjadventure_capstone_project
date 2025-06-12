@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaEnvelope, FaLock, FaGoogle, FaFacebookF } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
-import Navbar from "./Navbar"; // Import navbar Anda
+import Navbar from "./Navbar";
 import "../index.css";
 
 // Props type for InputField component

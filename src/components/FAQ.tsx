@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp, Phone, Mail, MessageCircle, Clock, HelpCircle } from "lucide-react";
+import Navbar from "./Navbar";
 
 interface FAQItem {
   id: number;
@@ -98,6 +99,8 @@ function FAQ() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <Navbar />
       {/* Hero Section */}
       <div className="relative h-96 bg-gradient-to-r from-green-500 to-blue-600 flex items-center justify-center">
         <div className="absolute inset-0 bg-black/20"></div>

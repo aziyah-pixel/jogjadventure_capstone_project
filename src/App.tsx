@@ -22,7 +22,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/AuthForm" element={<AuthForm />} />
       <Route path="/destination/:id" element={<DestinationCard />} />
-      <Route path="/destinations" element={<Destinations />} />
+      <Route path="/destination" element={<Destinations />} />
       <Route path="/about" element={<About />} />
       <Route path="/faq" element={<FAQ />} />    
     </Routes>

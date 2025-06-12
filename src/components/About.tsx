@@ -1,4 +1,5 @@
 import { Users, Award, MapPin, Heart, Camera, Globe } from "lucide-react";
+import Navbar from "./Navbar";
 
 function About() {
   const stats = [
@@ -49,6 +50,8 @@ function About() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Navbar */}
+      <Navbar />
       {/* Hero Section */}
       <div className="relative h-96 bg-gradient-to-r from-orange-500 to-red-600 flex items-center justify-center">
         <div className="absolute inset-0 bg-black/20"></div>
@@ -146,9 +149,12 @@ function About() {
         <div className="text-center mt-12">
           <h3 className="text-2xl font-bold text-gray-800 mb-4">Ready to Explore Jogja?</h3>
           <p className="text-gray-600 mb-6">Mari bergabung dengan ribuan traveler yang telah merasakan keajaiban Jogja bersama kami</p>
-          <button className="bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition-colors font-semibold">
+          <a
+            href="/"
+            className="inline-block bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition-colors font-semibold cursor-pointer"
+          >
             Start Your Journey
-          </button>
+          </a>
         </div>
       </div>
     </div>

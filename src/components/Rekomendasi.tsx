@@ -1,13 +1,26 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
+
+type TabName = "Rekomendasi" | "Rating" | "Sering Dikunjungi";
+
+type TabContent = {
+  title: string;
+  subtitle: string;
+  mainImage: string;
+  mainImageAlt: string;
+  borderColor: string;
+  stats: { label: string; value: string }[];
+  galleryImages: { src: string; alt: string; label: string }[];
+};
 
 function Rekomendasi() {
-  const [activeTab, setActiveTab] = useState("Rekomendasi");
+  const [activeTab, setActiveTab] = useState<TabName>("Rekomendasi");
 
-  const tabs = ["Rekomendasi", "Rating", "Sering Dikunjungi"];
+  const tabs: TabName[] = ["Rekomendasi", "Rating", "Sering Dikunjungi"];
 
   // Data untuk setiap tab
-  const tabContent = {
+  const tabContent: Record<TabName, TabContent> = {
     Rekomendasi: {
       title: "Kami Menyediakan Wisata\nSightseeing Terbaik di Jogja",
       subtitle:
@@ -227,16 +240,17 @@ function Rekomendasi() {
                 ))}
               </motion.div>
 
-              {/* CTA Button */}
-              <motion.div
+                {/* CTA Button */}
+                <motion.div
                 variants={itemVariants}
                 className="mt-8 flex justify-center lg:justify-start"
-              >
-                <motion.button
+                >
+                <Link to="/destinations">
+                  <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
-                >
+                  >
                   Jelajahi Sekarang
                   <svg
                     className="w-5 h-5"
@@ -245,14 +259,15 @@ function Rekomendasi() {
                     viewBox="0 0 24 24"
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
                     />
                   </svg>
-                </motion.button>
-              </motion.div>
+                  </motion.button>
+                </Link>
+                </motion.div>
             </motion.div>
 
             {/* Right Content - Large Hero Image */}
