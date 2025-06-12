@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Rekomendasi from './components/Rekomendasi';
 import AuthForm from './components/AuthForm';
 import Destinations from './components/Destination';
 import DestinationCard from './components/DestinationCard';
@@ -14,7 +13,6 @@ function Home() {
     <>
         <Navbar />
         <Hero />
-        <Rekomendasi />
     </>
   );
 }
