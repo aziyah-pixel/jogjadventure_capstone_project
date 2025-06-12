@@ -2,17 +2,15 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import Destination from './DestinationPopular';
 import Testimonial from './Testimonial';
-import Explore from './Jelajah';
+import Jelajah from './Jelajah';
 import Footer from "./Footer";
 import Rekomendasi from "./Rekomendasi";
-
 
 function Hero() {
   const [placeholderText, setPlaceholderText] = useState("Search...");
   const [searchValue, setSearchValue] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const fullText = "Search beautiful places...";
-
 
   // Typing effect for placeholder
   useEffect(() => {
@@ -128,9 +126,9 @@ function Hero() {
         </div>
       </div>
       
+      {/* Urutan komponen yang direkomendasikan */}
       <Destination />
-      <Rekomendasi/>
-
+      
       {/* Recent Searches */}
       {recentSearches.length > 0 && (
         <section className="bg-gray-50 py-14 text-center">
@@ -153,8 +151,9 @@ function Hero() {
         </section>
       )}
       
-      <Testimonial/>
-      <Explore />
+      <Rekomendasi />
+      <Testimonial />
+      <Jelajah />
       <Footer />
     </>
   );
