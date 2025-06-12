@@ -1,60 +1,55 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 interface ExploreProps {
-  onClick?: () => void;
   className?: string;
+  destinationPath?: string; // Flexible path untuk navigasi
 }
 
-function Explore({ onClick, className = '' }: ExploreProps) {
-  const [isHovered, setIsHovered] = useState(false);
+function Explore({ className = '', destinationPath = '/destination' }: ExploreProps) {
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   return (
     <section className={`relative bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 py-12 px-4 sm:px-6 lg:px-8 ${className}`}>
       <div className="mx-auto w-full max-w-xl">
-        <div 
-          className="relative w-full h-44 sm:h-52 md:h-56 lg:h-64 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group"
-          onClick={onClick}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+        <div className="relative w-full h-44 sm:h-52 md:h-56 lg:h-64 rounded-3xl overflow-hidden shadow-xl transition-shadow duration-300">
           {/* Background Image + Gradient Overlay */}
           <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+            className="absolute inset-0 bg-cover bg-center"
             style={{
               backgroundImage:
                 "linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0,0,0,0.2)), url('/tugujogja.jpg')",
             }}
           />
 
-          {/* Animated Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-transparent to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
           {/* Content */}
           <div className="relative z-10 h-full flex items-center justify-between px-5 sm:px-8">
             <div className="flex-1">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2 group-hover:translate-x-1 transition-transform duration-300">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2">
                 Explore Jogja
               </h2>
-              <p className="text-white/80 text-sm sm:text-base opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-100">
+              <p className="text-white/80 text-sm sm:text-base">
                 Temukan keajaiban kota istimewa
               </p>
             </div>
 
-            {/* Arrow Button */}
-            <button 
+            {/* Arrow Button  */}
+            <Link 
+              to={destinationPath}
               className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/50 flex items-center justify-center transition-all duration-300 backdrop-blur-sm ${
-                isHovered 
-                  ? 'bg-white/30 border-white/80 scale-110' 
+                isButtonHovered 
+                  ? 'bg-white/30 border-white/80 scale-110 shadow-lg' 
                   : 'hover:bg-white/20 hover:border-white/70'
               }`}
-              onClick={(e) => {
-                e.stopPropagation();
-                onClick?.();
-              }}
+              onMouseEnter={() => setIsButtonHovered(true)}
+              onMouseLeave={() => setIsButtonHovered(false)}
+              aria-label="Explore destinations in Jogja"
+              // Optional: Preload route untuk performance
+              onMouseOver={(e) => e.currentTarget.focus()}
             >
               <svg
                 className={`w-5 h-5 text-white transition-transform duration-300 ${
-                  isHovered ? 'translate-x-0.5' : ''
+                  isButtonHovered ? 'translate-x-0.5' : ''
                 }`}
                 fill="none"
                 stroke="currentColor"
@@ -67,28 +62,28 @@ function Explore({ onClick, className = '' }: ExploreProps) {
                   d="M9 5l7 7-7 7"
                 />
               </svg>
-            </button>
+            </Link>
           </div>
 
           {/* Decorative Elements */}
-          <div className="absolute top-4 right-4 w-16 h-16 border border-white/20 rounded-full opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
-          <div className="absolute bottom-4 left-4 w-8 h-8 border border-white/20 rounded-full opacity-30 group-hover:opacity-50 transition-opacity duration-300" />
+          <div className="absolute top-4 right-4 w-16 h-16 border border-white/20 rounded-full opacity-50" />
+          <div className="absolute bottom-4 left-4 w-8 h-8 border border-white/20 rounded-full opacity-30" />
         </div>
 
-        {/* Optional: Quick Stats */}
+        {/* Quick Stats - Bisa diklik untuk navigasi juga */}
         <div className="mt-4 flex justify-center space-x-6 text-white/80 text-sm">
-          <div className="text-center">
+          <Link to={destinationPath} className="text-center hover:text-white transition-colors duration-200">
             <div className="font-semibold">150+</div>
             <div className="text-xs">Destinasi</div>
-          </div>
+          </Link>
           <div className="text-center">
             <div className="font-semibold">4.8★</div>
             <div className="text-xs">Rating</div>
           </div>
-          <div className="text-center">
+          <Link to={destinationPath} className="text-center hover:text-white transition-colors duration-200">
             <div className="font-semibold">50K+</div>
             <div className="text-xs">Wisatawan</div>
-          </div>
+          </Link>
         </div>
       </div>
     </section>

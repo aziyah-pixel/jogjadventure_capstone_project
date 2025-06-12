@@ -52,7 +52,7 @@ function Navbar() {
           Home
         </Link>
         <Link
-          to="/destinations"
+          to="/destination"
           className="cursor-pointer hover:text-secondary transition"
         >
           Destinations
