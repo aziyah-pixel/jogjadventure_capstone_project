@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import Destination from './Destination';
+import Destination from './DestinationPopular';
 import Testimonial from './Testimonial';
-import Explore from './Explore';
+import Explore from './Jelajah';
 import Footer from "./Footer";
 import Rekomendasi from "./Rekomendasi";
 

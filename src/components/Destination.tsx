@@ -1,387 +1,210 @@
-import { motion } from "framer-motion";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Search, MapPin, Star, Clock, Camera } from "lucide-react";
 
-function Destination() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-    
-    // Data untuk destinasi
-    const destinations = [
-      {
-        id: 1,
-        name: "Prambanan",
-        image: "/prambanan2.jpg",
-        description:
-          "Ancient Hindu temple complex featuring stunning architecture",
-        size: "large",
-      },
-      {
-        id: 2,
-        name: "Malioboro",
-        image: "/malioboro.jpg",
-        description: "Famous shopping street with local culture",
-        size: "small",
-      },
-      {
-        id: 3,
-        name: "Tugu Jogja",
-        image: "/tugujogja.jpg",
-        description: "Iconic monument representing the spirit of Yogyakarta",
-        size: "small",
-      },
-      {
-        id: 4,
-        name: "Titik Nol Km Jogja",
-        image: "/nolkm.jpg",
-        description: "Historical landmark marking the heart of Yogyakarta",
-        size: "large",
-      },
-      {
-        id: 5,
-        name: "Parangtritis",
-        image: "/parangtritis1.jpg",
-        description: "Beautiful beach with mystical legends",
-        size: "large",
-      },
-      {
-        id: 6,
-        name: "Taman Sari",
-        image: "/tamansari.jpg",
-        description: "Royal garden complex with beautiful pools",
-        size: "small",
-      },
-      {
-        id: 7,
-        name: "Borobudur",
-        image: "/borobudur.jpg",
-        description: "World's largest Buddhist temple complex",
-        size: "large",
-      },
-      {
-        id: 8,
-        name: "Keraton Yogyakarta",
-        image: "/keraton.jpg",
-        description: "Sultan's palace with rich Javanese culture",
-        size: "small",
-      },
-    ];
-  
-  
-    // Navigation functions - bergeser satu card per satu
-    const goToPrevious = () => {
-      if (isAnimating) return;
-      setIsAnimating(true);
-      setCurrentSlide((prev) =>
-        prev === 0 ? destinations.length - 1 : prev - 1
-      );
-      setTimeout(() => setIsAnimating(false), 600);
-    };
-  
-    const goToNext = () => {
-      if (isAnimating) return;
-      setIsAnimating(true);
-      setCurrentSlide((prev) =>
-        prev === destinations.length - 1 ? 0 : prev + 1
-      );
-      setTimeout(() => setIsAnimating(false), 600);
-    };
-  
-    // Get current set of destinations to display (6 cards starting from currentSlide)
-    const getCurrentDestinations = () => {
-      const result = [];
-      for (let i = 0; i < 6; i++) {
-        const index = (currentSlide + i) % destinations.length;
-        result.push(destinations[index]);
-      }
-      return result;
-    };
-  
-    const currentDestinations = getCurrentDestinations();
-  
-    return (
-      <>
-        <section className="bg-white py-20 text-center min-h-screen">
-          <h2 className="text-4xl font-bold text-teal-600 mb-2">
-            Popular Destinations
-          </h2>
-          <p className="text-gray-600 mb-12 text-lg">
-            The most beautiful place in Yogyakarta for your holiday
-          </p>
-  
-          <div className="max-w-6xl mx-auto px-4 overflow-hidden">
-            {/* Grid Layout with Smooth Slide Animation */}
-            <motion.div
-              key={currentSlide}
-              initial={{ x: 100, opacity: 0.8 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -100, opacity: 0.8 }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-                duration: 0.6,
-              }}
-              className="grid grid-cols-3 gap-3 h-[780px] mb-8"
-            >
-              {/* Left Column */}
-              <div className="flex flex-col gap-3">
-                {/* First Large Card */}
-                {currentDestinations[0] && (
-                  <Link 
-                    to={`/destination/${currentDestinations[0].id}`} 
-                    className="block flex-1 cursor-pointer"
-                  >
-                    <motion.div
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.1, duration: 0.4 }}
-                      className="relative rounded-3xl overflow-hidden shadow-lg group h-full"
-                    >
-                      <img
-                        src={currentDestinations[0].image}
-                        alt={currentDestinations[0].name}
-                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                      <div className="absolute bottom-6 left-6 text-white">
-                        <h3 className="text-xl font-bold mb-2">
-                          {currentDestinations[0].name}
-                        </h3>
-                        <p className="text-white/90 text-sm leading-relaxed">
-                          {currentDestinations[0].description}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </Link>
-                )}
-  
-                {/* First Small Card */}
-                {currentDestinations[1] && (
-                  <Link 
-                    to={`/destination/${currentDestinations[1].id}`} 
-                    className="block cursor-pointer"
-                  >
-                    <motion.div
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.2, duration: 0.4 }}
-                      className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px]"
-                    >
-                      <img
-                        src={currentDestinations[1].image}
-                        alt={currentDestinations[1].name}
-                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                      <div className="absolute bottom-4 left-4 text-white">
-                        <h3 className="text-lg font-bold mb-1">
-                          {currentDestinations[1].name}
-                        </h3>
-                        <p className="text-white/90 text-xs leading-relaxed">
-                          {currentDestinations[1].description}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </Link>
-                )}
-              </div>
-  
-              {/* Middle Column with Navigation Arrows */}
-              <div className="flex flex-col gap-3 items-center">
-                {/* Second Small Card */}
-                {currentDestinations[2] && (
-                  <Link 
-                    to={`/destination/${currentDestinations[2].id}`} 
-                    className="block w-full cursor-pointer"
-                  >
-                    <motion.div
-                      initial={{ y: -20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.15, duration: 0.4 }}
-                      className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px] w-full"
-                    >
-                      <img
-                        src={currentDestinations[2].image}
-                        alt={currentDestinations[2].name}
-                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                      <div className="absolute bottom-4 left-4 text-white">
-                        <h3 className="text-lg font-bold mb-1">
-                          {currentDestinations[2].name}
-                        </h3>
-                        <p className="text-white/90 text-xs leading-relaxed">
-                          {currentDestinations[2].description}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </Link>
-                )}
-  
-                {/* Second Large Card */}
-                {currentDestinations[3] && (
-                  <Link 
-                    to={`/destination/${currentDestinations[3].id}`} 
-                    className="block flex-1 w-full cursor-pointer"
-                  >
-                    <motion.div
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.25, duration: 0.4 }}
-                      className="relative rounded-3xl overflow-hidden shadow-lg group h-full max-h-[380px] w-full"
-                    >
-                      <img
-                        src={currentDestinations[3].image}
-                        alt={currentDestinations[3].name}
-                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                      <div className="absolute bottom-6 left-6 text-white">
-                        <h3 className="text-xl font-bold mb-2">
-                          {currentDestinations[3].name}
-                        </h3>
-                        <p className="text-white/90 text-sm leading-relaxed">
-                          {currentDestinations[3].description}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </Link>
-                )}
-              </div>
-  
-              {/* Right Column */}
-              <div className="flex flex-col gap-3">
-                {/* Third Large Card */}
-                {currentDestinations[4] && (
-                  <Link 
-                    to={`/destination/${currentDestinations[4].id}`} 
-                    className="block flex-1 cursor-pointer"
-                  >
-                    <motion.div
-                      initial={{ x: 20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.3, duration: 0.4 }}
-                      className="relative rounded-3xl overflow-hidden shadow-lg group h-full"
-                    >
-                      <img
-                        src={currentDestinations[4].image}
-                        alt={currentDestinations[4].name}
-                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                      <div className="absolute bottom-6 left-6 text-white">
-                        <h3 className="text-xl font-bold mb-2">
-                          {currentDestinations[4].name}
-                        </h3>
-                        <p className="text-white/90 text-sm leading-relaxed">
-                          {currentDestinations[4].description}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </Link>
-                )}
-  
-                {/* Third Small Card */}
-                {currentDestinations[5] && (
-                  <Link 
-                    to={`/destination/${currentDestinations[5].id}`} 
-                    className="block cursor-pointer"
-                  >
-                    <motion.div
-                      initial={{ x: 20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.4, duration: 0.4 }}
-                      className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px]"
-                    >
-                      <img
-                        src={currentDestinations[5].image}
-                        alt={currentDestinations[5].name}
-                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                      <div className="absolute bottom-4 left-4 text-white">
-                        <h3 className="text-lg font-bold mb-1">
-                          {currentDestinations[5].name}
-                        </h3>
-                        <p className="text-white/90 text-xs leading-relaxed">
-                          {currentDestinations[5].description}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </Link>
-                )}
-              </div>
-            </motion.div>
+interface Destination {
+  id: number;
+  name: string;
+  description: string;
+  location: string;
+  rating: number;
+  duration: string;
+  image: string;
+  category: string;
+  price: string;
+}
 
-            {/* Navigation Arrows - Moved outside the motion.div */}
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.35, duration: 0.4 }}
-              className="flex justify-center items-center space-x-4 mt-8 pb-8"
-            >
-              {/* Left Arrow */}
-              <button
-                onClick={goToPrevious}
-                aria-label="Previous"
-                className="w-12 h-12 cursor-pointer rounded-full bg-white shadow-md ring-1 ring-gray-200 flex items-center justify-center hover:bg-gray-100 hover:shadow-xl transition-all duration-300 group"
-              >
-                <svg
-                  className="w-6 h-6 text-gray-600 group-hover:text-teal-600 group-hover:-translate-x-1 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
+function Destinations() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
-              {/* Slide Indicator */}
-              <div className="flex items-center space-x-2">
-                {destinations.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === currentSlide ? "bg-teal-600" : "bg-gray-300"
-                    }`}
-                  />
-                ))}
-              </div>
+  const destinations: Destination[] = [
+    {
+      id: 1,
+      name: "Candi Borobudur",
+      description: "Candi Buddha terbesar di dunia dengan arsitektur yang menakjubkan",
+      location: "Magelang, Jawa Tengah",
+      rating: 4.8,
+      duration: "3-4 jam",
+      image: "/api/placeholder/400/300",
+      category: "heritage",
+      price: "Rp 50.000"
+    },
+    {
+      id: 2,
+      name: "Candi Prambanan",
+      description: "Kompleks candi Hindu terbesar dengan relief yang memukau",
+      location: "Sleman, Yogyakarta",
+      rating: 4.7,
+      duration: "2-3 jam",
+      image: "/api/placeholder/400/300",
+      category: "heritage",
+      price: "Rp 40.000"
+    },
+    {
+      id: 3,
+      name: "Pantai Parangtritis",
+      description: "Pantai eksotis dengan pemandangan sunset yang menawan",
+      location: "Bantul, Yogyakarta",
+      rating: 4.5,
+      duration: "2-3 jam",
+      image: "/api/placeholder/400/300",
+      category: "nature",
+      price: "Gratis"
+    },
+    {
+      id: 4,
+      name: "Malioboro Street",
+      description: "Jalan legendaris dengan berbagai toko, kuliner, dan budaya",
+      location: "Yogyakarta",
+      rating: 4.6,
+      duration: "2-4 jam",
+      image: "/api/placeholder/400/300",
+      category: "culture",
+      price: "Gratis"
+    },
+    {
+      id: 5,
+      name: "Goa Jomblang",
+      description: "Goa vertikal dengan cahaya surga yang memukau",
+      location: "Gunung Kidul, Yogyakarta",
+      rating: 4.9,
+      duration: "5-6 jam",
+      image: "/api/placeholder/400/300",
+      category: "adventure",
+      price: "Rp 450.000"
+    },
+    {
+      id: 6,
+      name: "Keraton Yogyakarta",
+      description: "Istana Sultan dengan arsitektur Jawa yang megah",
+      location: "Yogyakarta",
+      rating: 4.4,
+      duration: "1-2 jam",
+      image: "/api/placeholder/400/300",
+      category: "culture",
+      price: "Rp 15.000"
+    }
+  ];
 
-              {/* Right Arrow */}
-              <button
-                onClick={goToNext}
-                aria-label="Next"
-                className="w-12 h-12 cursor-pointer rounded-full bg-white shadow-md ring-1 ring-gray-200 flex items-center justify-center hover:bg-gray-100 hover:shadow-xl transition-all duration-300 group"
-              >
-                <svg
-                  className="w-6 h-6 text-gray-600 group-hover:text-teal-600 group-hover:translate-x-1 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-                </button>
-              </motion.div>
+  const categories = [
+    { id: "all", name: "Semua", icon: "🏛️" },
+    { id: "heritage", name: "Heritage", icon: "🏛️" },
+    { id: "nature", name: "Alam", icon: "🌿" },
+    { id: "culture", name: "Budaya", icon: "🎭" },
+    { id: "adventure", name: "Petualangan", icon: "⛰️" }
+  ];
+
+  const filteredDestinations = destinations.filter(dest => {
+    const matchesSearch = dest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         dest.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || dest.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="relative h-96 bg-gradient-to-r from-blue-600 to-purple-700 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="relative z-10 text-center text-white px-4">
+          <h1 className="text-5xl font-bold mb-4">Destinations</h1>
+          <p className="text-xl">Temukan keajaiban tersembunyi di Yogyakarta</p>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-6 py-12">
+        {/* Search & Filter Section */}
+        <div className="mb-12">
+          <div className="flex flex-col md:flex-row gap-6 items-center mb-8">
+            {/* Search Bar */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Cari destinasi..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
             </div>
-          </section>
-       
-      </>
-    );
-  }
-  
-  export default Destination;
+          </div>
+
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-3">
+            {categories.map(category => (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+                  selectedCategory === category.id
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                }`}
+              >
+                <span>{category.icon}</span>
+                <span>{category.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Destinations Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredDestinations.map(destination => (
+            <div key={destination.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="relative">
+                <img
+                  src={destination.image}
+                  alt={destination.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="absolute top-4 right-4 bg-white px-2 py-1 rounded-full text-sm font-semibold text-green-600">
+                  {destination.price}
+                </div>
+                <div className="absolute top-4 left-4 bg-black/50 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                  <Camera className="w-3 h-3" />
+                  Photo Spot
+                </div>
+              </div>
+              
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{destination.name}</h3>
+                <p className="text-gray-600 mb-4 text-sm leading-relaxed">{destination.description}</p>
+                
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <MapPin className="w-4 h-4" />
+                    <span>{destination.location}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <Clock className="w-4 h-4" />
+                    <span>{destination.duration}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-yellow-500">
+                    <Star className="w-4 h-4 fill-current" />
+                    <span className="text-gray-700">{destination.rating}/5</span>
+                  </div>
+                </div>
+                
+                <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+                  Lihat Detail
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* No Results */}
+        {filteredDestinations.length === 0 && (
+          <div className="text-center py-12">
+            <div className="text-gray-400 text-6xl mb-4">🔍</div>
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">Destinasi tidak ditemukan</h3>
+            <p className="text-gray-500">Coba ubah kata kunci pencarian atau kategori</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Destinations;

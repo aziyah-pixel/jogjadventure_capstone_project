@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../index.css"; 
+import "../index.css";
 import { Link } from "react-router-dom";
 
 function Navbar() {
@@ -43,26 +43,32 @@ function Navbar() {
           : "bg-transparent"
       }`}
     >
-      <h1 className="text-2xl font-bold font-montserrat text-white">
+      <Link to="/" className="text-2xl font-bold font-montserrat text-white">
         Jogjadventure<span className="text-white">.</span>
-      </h1>
+      </Link>
 
       <div className="hidden md:flex gap-6 text-sm text-white">
-        <a href="#" className="cursor-pointer hover:text-secondary transition">
+        <Link to="/" className="cursor-pointer hover:text-secondary transition">
           Home
-        </a>
-        <a
-          href="#Explore"
+        </Link>
+        <Link
+          to="/destinations"
           className="cursor-pointer hover:text-secondary transition"
         >
-          Explore
-        </a>
-        <a
-          href="#faq"
+          Destinations
+        </Link>
+        <Link
+          to="/about"
+          className="cursor-pointer hover:text-secondary transition"
+        >
+          About
+        </Link>
+        <Link
+          to="/faq"
           className="cursor-pointer hover:text-secondary transition"
         >
           FAQ & Bantuan
-        </a>
+        </Link>
       </div>
 
       <div className="flex gap-4 items-center relative w-[200px] h-9">
@@ -75,7 +81,10 @@ function Navbar() {
           }}
         />
         {/* Sign in Button */}
-        <Link to="/AuthForm?mode=signin" className="relative z-10 w-[90px] h-full">
+        <Link
+          to="/AuthForm?mode=signin"
+          className="relative z-10 w-[90px] h-full"
+        >
           <button
             onMouseEnter={() => setHovered("signin")}
             onMouseLeave={() => setHovered(null)}
@@ -86,7 +95,10 @@ function Navbar() {
           </button>
         </Link>
         {/* Sign up Button */}
-        <Link to="/AuthForm?mode=signup" className="relative z-10 w-[90px] h-full">
+        <Link
+          to="/AuthForm?mode=signup"
+          className="relative z-10 w-[90px] h-full"
+        >
           <button
             onMouseEnter={() => setHovered("register")}
             onMouseLeave={() => setHovered(null)}
