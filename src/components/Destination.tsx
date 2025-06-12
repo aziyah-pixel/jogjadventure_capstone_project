@@ -125,117 +125,129 @@ function Destination() {
               className="grid grid-cols-3 gap-3 h-[780px]"
             >
               {/* Left Column */}
-              <div className="flex flex-col gap-3 cursor-pointer">
+              <div className="flex flex-col gap-3">
                 {/* First Large Card */}
                 {currentDestinations[0] && (
-                  <Link to={`/destination/${currentDestinations[0].id}`} className="relative flex-1">
-                  <motion.div
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.1, duration: 0.4 }}
-                    className="relative rounded-3xl overflow-hidden shadow-lg group flex-1"
+                  <Link 
+                    to={`/destination/${currentDestinations[0].id}`} 
+                    className="block flex-1 cursor-pointer"
                   >
-                    <img
-                      src={currentDestinations[0].image}
-                      alt={currentDestinations[0].name}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                    <div className="absolute bottom-6 left-6 text-white">
-                      <h3 className="text-xl font-bold mb-2">
-                        {currentDestinations[0].name}
-                      </h3>
-                      <p className="text-white/90 text-sm leading-relaxed">
-                        {currentDestinations[0].description}
-                      </p>
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.1, duration: 0.4 }}
+                      className="relative rounded-3xl overflow-hidden shadow-lg group h-full"
+                    >
+                      <img
+                        src={currentDestinations[0].image}
+                        alt={currentDestinations[0].name}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                      <div className="absolute bottom-6 left-6 text-white">
+                        <h3 className="text-xl font-bold mb-2">
+                          {currentDestinations[0].name}
+                        </h3>
+                        <p className="text-white/90 text-sm leading-relaxed">
+                          {currentDestinations[0].description}
+                        </p>
+                      </div>
+                    </motion.div>
                   </Link>
                 )}
   
                 {/* First Small Card */}
                 {currentDestinations[1] && (
-                   <Link to={`/destination/${currentDestinations[1].id}`} className="flex-1">
-                  <motion.div
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.2, duration: 0.4 }}
-                    className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px]"
+                  <Link 
+                    to={`/destination/${currentDestinations[1].id}`} 
+                    className="block cursor-pointer"
                   >
-                    <img
-                      src={currentDestinations[1].image}
-                      alt={currentDestinations[1].name}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                    <div className="absolute bottom-4 left-4 text-white">
-                      <h3 className="text-lg font-bold mb-1">
-                        {currentDestinations[1].name}
-                      </h3>
-                      <p className="text-white/90 text-xs leading-relaxed">
-                        {currentDestinations[1].description}
-                      </p>
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.2, duration: 0.4 }}
+                      className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px]"
+                    >
+                      <img
+                        src={currentDestinations[1].image}
+                        alt={currentDestinations[1].name}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                      <div className="absolute bottom-4 left-4 text-white">
+                        <h3 className="text-lg font-bold mb-1">
+                          {currentDestinations[1].name}
+                        </h3>
+                        <p className="text-white/90 text-xs leading-relaxed">
+                          {currentDestinations[1].description}
+                        </p>
+                      </div>
+                    </motion.div>
                   </Link>
                 )}
               </div>
   
               {/* Middle Column with Navigation Arrows */}
-              <div className="flex flex-col gap-3 items-center cursor-pointer">
+              <div className="flex flex-col gap-3 items-center">
                 {/* Second Small Card */}
                 {currentDestinations[2] && (
-                   <Link to={`/destination/${currentDestinations[2].id}`} className="flex-1">
-                  <motion.div
-                    initial={{ y: -20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.15, duration: 0.4 }}
-                    className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px] w-full"
+                  <Link 
+                    to={`/destination/${currentDestinations[2].id}`} 
+                    className="block w-full cursor-pointer"
                   >
-                    <img
-                      src={currentDestinations[2].image}
-                      alt={currentDestinations[2].name}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                    <div className="absolute bottom-4 left-4 text-white">
-                      <h3 className="text-lg font-bold mb-1">
-                        {currentDestinations[2].name}
-                      </h3>
-                      <p className="text-white/90 text-xs leading-relaxed">
-                        {currentDestinations[2].description}
-                      </p>
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      initial={{ y: -20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.15, duration: 0.4 }}
+                      className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px] w-full"
+                    >
+                      <img
+                        src={currentDestinations[2].image}
+                        alt={currentDestinations[2].name}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                      <div className="absolute bottom-4 left-4 text-white">
+                        <h3 className="text-lg font-bold mb-1">
+                          {currentDestinations[2].name}
+                        </h3>
+                        <p className="text-white/90 text-xs leading-relaxed">
+                          {currentDestinations[2].description}
+                        </p>
+                      </div>
+                    </motion.div>
                   </Link>
                 )}
   
                 {/* Second Large Card */}
-                <Link to={`/destination/${currentDestinations[3].id}`} className="flex-1">
                 {currentDestinations[3] && (
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.25, duration: 0.4 }}
-                    className="relative rounded-3xl overflow-hidden shadow-lg group flex-1 max-h-[380px] w-full"
+                  <Link 
+                    to={`/destination/${currentDestinations[3].id}`} 
+                    className="block flex-1 w-full cursor-pointer"
                   >
-                    <img
-                      src={currentDestinations[3].image}
-                      alt={currentDestinations[3].name}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                    <div className="absolute bottom-6 left-6 text-white">
-                      <h3 className="text-xl font-bold mb-2">
-                        {currentDestinations[3].name}
-                      </h3>
-                      <p className="text-white/90 text-sm leading-relaxed">
-                        {currentDestinations[3].description}
-                      </p>
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.25, duration: 0.4 }}
+                      className="relative rounded-3xl overflow-hidden shadow-lg group h-full max-h-[380px] w-full"
+                    >
+                      <img
+                        src={currentDestinations[3].image}
+                        alt={currentDestinations[3].name}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                      <div className="absolute bottom-6 left-6 text-white">
+                        <h3 className="text-xl font-bold mb-2">
+                          {currentDestinations[3].name}
+                        </h3>
+                        <p className="text-white/90 text-sm leading-relaxed">
+                          {currentDestinations[3].description}
+                        </p>
+                      </div>
+                    </motion.div>
+                  </Link>
                 )}
-                </Link>
   
                 {/* Navigation Arrows */}
                 <motion.div
@@ -303,58 +315,64 @@ function Destination() {
               </div>
   
               {/* Right Column */}
-              <div className="flex flex-col gap-3 cursor-pointer">
+              <div className="flex flex-col gap-3">
                 {/* Third Large Card */}
                 {currentDestinations[4] && (
-                   <Link to={`/destination/${currentDestinations[4].id}`} className="flex-1">
-                  <motion.div
-                    initial={{ x: 20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.3, duration: 0.4 }}
-                    className="relative rounded-3xl overflow-hidden shadow-lg group flex-1"
+                  <Link 
+                    to={`/destination/${currentDestinations[4].id}`} 
+                    className="block flex-1 cursor-pointer"
                   >
-                    <img
-                      src={currentDestinations[4].image}
-                      alt={currentDestinations[4].name}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                    <div className="absolute bottom-6 left-6 text-white">
-                      <h3 className="text-xl font-bold mb-2">
-                        {currentDestinations[4].name}
-                      </h3>
-                      <p className="text-white/90 text-sm leading-relaxed">
-                        {currentDestinations[4].description}
-                      </p>
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      initial={{ x: 20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.3, duration: 0.4 }}
+                      className="relative rounded-3xl overflow-hidden shadow-lg group h-full"
+                    >
+                      <img
+                        src={currentDestinations[4].image}
+                        alt={currentDestinations[4].name}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                      <div className="absolute bottom-6 left-6 text-white">
+                        <h3 className="text-xl font-bold mb-2">
+                          {currentDestinations[4].name}
+                        </h3>
+                        <p className="text-white/90 text-sm leading-relaxed">
+                          {currentDestinations[4].description}
+                        </p>
+                      </div>
+                    </motion.div>
                   </Link>
                 )}
   
                 {/* Third Small Card */}
                 {currentDestinations[5] && (
-                   <Link to={`/destination/${currentDestinations[5].id}`} className="flex-1">
-                  <motion.div
-                    initial={{ x: 20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.4, duration: 0.4 }}
-                    className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px]"
+                  <Link 
+                    to={`/destination/${currentDestinations[5].id}`} 
+                    className="block cursor-pointer"
                   >
-                    <img
-                      src={currentDestinations[5].image}
-                      alt={currentDestinations[5].name}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                    <div className="absolute bottom-4 left-4 text-white">
-                      <h3 className="text-lg font-bold mb-1">
-                        {currentDestinations[5].name}
-                      </h3>
-                      <p className="text-white/90 text-xs leading-relaxed">
-                        {currentDestinations[5].description}
-                      </p>
-                    </div>
-                  </motion.div>
+                    <motion.div
+                      initial={{ x: 20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.4, duration: 0.4 }}
+                      className="relative rounded-3xl overflow-hidden shadow-lg group h-[300px]"
+                    >
+                      <img
+                        src={currentDestinations[5].image}
+                        alt={currentDestinations[5].name}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                      <div className="absolute bottom-4 left-4 text-white">
+                        <h3 className="text-lg font-bold mb-1">
+                          {currentDestinations[5].name}
+                        </h3>
+                        <p className="text-white/90 text-xs leading-relaxed">
+                          {currentDestinations[5].description}
+                        </p>
+                      </div>
+                    </motion.div>
                   </Link>
                 )}
               </div>
@@ -367,4 +385,3 @@ function Destination() {
   }
   
   export default Destination;
-  
