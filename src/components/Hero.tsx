@@ -12,7 +12,13 @@ function Hero() {
   const [placeholderText, setPlaceholderText] = useState("Search...");
   const [searchValue, setSearchValue] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [searchSuggestions, setSearchSuggestions] = useState<any[]>([]);
+  interface Suggestion {
+    name: string;
+    image?: string;
+    location?: string;
+    category?: string;
+  }
+  const [searchSuggestions, setSearchSuggestions] = useState<Suggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const fullText = "Search beautiful places...";
@@ -95,13 +101,10 @@ function Hero() {
 
     setRecentSearches(updatedSearches);
     setSearchValue("");
-    setShowSuggestions(false);
-
-    // Navigate to destination page with search query
-    navigate(`/destinations?search=${encodeURIComponent(searchQuery)}`);
+    navigate(`/destination?search=${encodeURIComponent(searchQuery)}`);
   };
 
-  const handleSuggestionClick = (suggestion: any) => {
+  const handleSuggestionClick = (suggestion: Suggestion) => {
     handleSearch(suggestion.name);
   };
 

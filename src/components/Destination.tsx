@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Search, MapPin, Star, Clock, Camera, ArrowLeft, Phone, Globe, Calendar, Users, Wallet, Navigation, Loader2, AlertCircle } from "lucide-react";
 import Navbar from './Navbar';
 
@@ -39,6 +40,7 @@ interface ApiResponse {
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 function DestinationApp() {
+  const location = useLocation();
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -51,6 +53,16 @@ function DestinationApp() {
   const [categories, setCategories] = useState([
     { id: "all", name: "Semua", icon: "🗺️" }
   ]);
+
+  // Extract search query from URL on component mount
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const searchQuery = queryParams.get('search');
+    
+    if (searchQuery) {
+      setSearchTerm(searchQuery);
+    }
+  }, [location.search]);
 
   // Fetch destinations from API
   const fetchDestinations = async (page = 1, search = "", category = "all") => {
