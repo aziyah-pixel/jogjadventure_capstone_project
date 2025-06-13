@@ -469,7 +469,7 @@ const AuthForm = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </div> 
 
           {/* Toggle Panel */}
           <div
