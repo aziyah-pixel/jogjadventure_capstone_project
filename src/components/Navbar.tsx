@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaRegUserCircle, FaSignOutAlt } from "react-icons/fa";
 import "../index.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function Navbar() {
   const [hovered, setHovered] = useState<"signin" | "register" | null>(null);
@@ -11,17 +11,56 @@ function Navbar() {
   const [user, setUser] = useState<any>(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Check if user is logged in
+  // Check if user is logged in - FIXED VERSION
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      try {
+        const token = localStorage.getItem("token");
+        const userData = localStorage.getItem("user");
+        
+        // Only update state, don't redirect from here
+        if (token && userData) {
+          setIsLoggedIn(true);
+          setUser(JSON.parse(userData));
+        } else {
+          setIsLoggedIn(false);
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error checking auth status:", error);
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+    };
+
+    checkAuthStatus();
+
+    // Listen for storage changes (when user logs in/out in other tabs)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "token" || e.key === "user") {
+        checkAuthStatus();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  // Listen for route changes to update auth state
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
-
+    
     if (token && userData) {
       setIsLoggedIn(true);
       setUser(JSON.parse(userData));
+    } else {
+      setIsLoggedIn(false);
+      setUser(null);
     }
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -61,7 +61,6 @@ const AuthForm = () => {
   const [showSignUpPassword, setShowSignUpPassword] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // NEW: Loading state for auth check
 
   // Input state types
   type AuthData = {
@@ -129,35 +128,23 @@ const AuthForm = () => {
     return 'Strong';
   };
 
-  // FIXED: Check if user is already logged in with proper loading state
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          console.log("User already logged in, redirecting...");
-          navigate("/", { replace: true }); // Use replace to avoid back button issues
-          return;
-        }
-      } catch (error) {
-        console.error("Error checking auth status:", error);
-      } finally {
-        setIsCheckingAuth(false);
-      }
-    };
-
-    checkAuthStatus();
-  }, [navigate]);
+  // COMPLETELY REMOVED AUTH CHECK FROM AUTHFORM
+  // Let the parent router or app handle redirects based on auth state
+  // AuthForm should only handle the actual authentication logic
 
   // Read mode from query string
   useEffect(() => {
     const mode = searchParams.get("mode");
     if (mode === "signin") {
       setIsActive(true);
-    } else {
+    } else if (mode === "signup") {
       setIsActive(false);
+    } else {
+      // Default to signup if no mode specified
+      setIsActive(false);
+      setSearchParams({ mode: "signup" }, { replace: true });
     }
-  }, [searchParams]);
+  }, [searchParams, setSearchParams]);
 
   // Clear messages after some time
   useEffect(() => {
@@ -170,7 +157,7 @@ const AuthForm = () => {
     }
   }, [errorMessage, successMessage]);
 
-  // FIXED: Sign In Handler
+  // Sign In Handler
   const handleSignInSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
@@ -188,7 +175,7 @@ const AuthForm = () => {
     setSuccessMessage("");
 
     try {
-      console.log("Attempting login with:", { email }); // Don't log password
+      console.log("Attempting login with:", { email });
       
       const response = await axios.post(`${API_BASE_URL}/auth/login`, {
         email,
@@ -200,16 +187,20 @@ const AuthForm = () => {
       const { token, user } = response.data;
       
       if (token && user) {
+        // Store auth data
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
         
         setSuccessMessage("Login berhasil!");
         setSignInData({ email: "", password: "" });
         
-        // FIXED: Remove window.location.reload() and use navigate with replace
+        // Trigger a storage event to notify other components
+        window.dispatchEvent(new Event('storage'));
+        
+        // Navigate after a short delay
         setTimeout(() => {
           navigate("/", { replace: true });
-        }, 1500); // Give user time to see success message
+        }, 1000);
       } else {
         throw new Error("Invalid response from server");
       }
@@ -237,7 +228,7 @@ const AuthForm = () => {
     }
   };
 
-  // FIXED: Sign Up Handler
+  // Sign Up Handler
   const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
@@ -264,7 +255,7 @@ const AuthForm = () => {
     setSuccessMessage("");
 
     try {
-      console.log("Attempting registration with:", { email }); // Don't log password
+      console.log("Attempting registration with:", { email });
       
       const response = await axios.post(`${API_BASE_URL}/auth/register`, {
         email,
@@ -276,16 +267,20 @@ const AuthForm = () => {
       const { token, user } = response.data;
       
       if (token && user) {
+        // Store auth data
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
         
         setSuccessMessage("Registrasi berhasil!");
         setSignUpData({ email: "", password: "" });
         
-        // FIXED: Remove window.location.reload() and use navigate with replace
+        // Trigger a storage event to notify other components
+        window.dispatchEvent(new Event('storage'));
+        
+        // Navigate after a short delay
         setTimeout(() => {
           navigate("/", { replace: true });
-        }, 1500); // Give user time to see success message
+        }, 1000);
       } else {
         throw new Error("Invalid response from server");
       }
@@ -312,18 +307,6 @@ const AuthForm = () => {
       setIsLoading(false);
     }
   };
-
-  // Show loading screen while checking auth
-  if (isCheckingAuth) {
-    return (
-      <div className="min-h-screen flex justify-center items-center bg-gray-100">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen font-['Poppins']">
