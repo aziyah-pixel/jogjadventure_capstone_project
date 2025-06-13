@@ -61,6 +61,7 @@ const AuthForm = () => {
   const [showSignUpPassword, setShowSignUpPassword] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // NEW: Loading state for auth check
 
   // Input state types
   type AuthData = {
@@ -77,22 +78,6 @@ const AuthForm = () => {
     email: "",
     password: "",
   });
-
-  // Password hashing function (consistent with ProfilePage)
-  const hashPassword = async (password: string, salt?: string): Promise<{ hash: string, salt: string }> => {
-    // Generate salt if not provided
-    const saltToUse = salt || Array.from(crypto.getRandomValues(new Uint8Array(16)))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
-    
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password + saltToUse);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    
-    return { hash, salt: saltToUse };
-  };
 
   // Strong password validation
   const validatePasswordStrength = (password: string): string => {
@@ -144,21 +129,33 @@ const AuthForm = () => {
     return 'Strong';
   };
 
-  // Check if user is already logged in
+  // FIXED: Check if user is already logged in with proper loading state
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/"); // Redirect to home if already logged in
-    }
+    const checkAuthStatus = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          console.log("User already logged in, redirecting...");
+          navigate("/", { replace: true }); // Use replace to avoid back button issues
+          return;
+        }
+      } catch (error) {
+        console.error("Error checking auth status:", error);
+      } finally {
+        setIsCheckingAuth(false);
+      }
+    };
+
+    checkAuthStatus();
   }, [navigate]);
 
-  // Read mode from query string, update isActive when component mounts
+  // Read mode from query string
   useEffect(() => {
     const mode = searchParams.get("mode");
     if (mode === "signin") {
-      setIsActive(true); // show Sign In
+      setIsActive(true);
     } else {
-      setIsActive(false); // default to Sign Up
+      setIsActive(false);
     }
   }, [searchParams]);
 
@@ -173,121 +170,160 @@ const AuthForm = () => {
     }
   }, [errorMessage, successMessage]);
 
+  // FIXED: Sign In Handler
   const handleSignInSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  const { email, password } = signInData;
-  
-  if (!email || !password) {
-    setErrorMessage("Email dan password harus diisi");
-    setHasError(true);
-    setTimeout(() => setHasError(false), 500);
-    return;
-  }
-
-  setIsLoading(true);
-  setErrorMessage("");
-  setSuccessMessage("");
-
-  try {
-    // PERBAIKAN: Kirim password asli untuk login juga
-    const response = await axios.post(`${API_BASE_URL}/auth/login`, {
-      email,
-      password  // ← Kirim password asli
-    });
-
-    const { token, user } = response.data;
+    e.preventDefault();
     
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
+    const { email, password } = signInData;
     
-    setSuccessMessage("Login berhasil!");
-    setSignInData({ email: "", password: "" });
-    
-    setTimeout(() => {
-      navigate("/");
-      window.location.reload();
-    }, 1000);
-    
-  } catch (error: any) {
-    console.error("Login error:", error);
-    if (error.response?.data?.msg) {
-      setErrorMessage(error.response.data.msg);
-    } else if (error.response?.data?.errors) {
-      setErrorMessage(error.response.data.errors[0].msg);
-    } else {
-      setErrorMessage("Terjadi kesalahan saat login");
+    if (!email || !password) {
+      setErrorMessage("Email dan password harus diisi");
+      setHasError(true);
+      setTimeout(() => setHasError(false), 500);
+      return;
     }
-    setHasError(true);
-    setTimeout(() => setHasError(false), 500);
-  } finally {
-    setIsLoading(false);
-  }
-};
 
+    setIsLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    try {
+      console.log("Attempting login with:", { email }); // Don't log password
+      
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+        email,
+        password
+      });
+
+      console.log("Login response:", response.data);
+
+      const { token, user } = response.data;
+      
+      if (token && user) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        
+        setSuccessMessage("Login berhasil!");
+        setSignInData({ email: "", password: "" });
+        
+        // FIXED: Remove window.location.reload() and use navigate with replace
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 1500); // Give user time to see success message
+      } else {
+        throw new Error("Invalid response from server");
+      }
+      
+    } catch (error: any) {
+      console.error("Login error:", error);
+      
+      let errorMsg = "Terjadi kesalahan saat login";
+      
+      if (error.code === 'ERR_NETWORK') {
+        errorMsg = "Tidak dapat terhubung ke server. Pastikan server berjalan di http://localhost:5000";
+      } else if (error.response?.data?.msg) {
+        errorMsg = error.response.data.msg;
+      } else if (error.response?.data?.message) {
+        errorMsg = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        errorMsg = error.response.data.errors[0].msg;
+      }
+      
+      setErrorMessage(errorMsg);
+      setHasError(true);
+      setTimeout(() => setHasError(false), 500);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // FIXED: Sign Up Handler
   const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  const { email, password } = signUpData;
-  
-  if (!email || !password) {
-    setErrorMessage("Email dan password harus diisi");
-    setHasError(true);
-    setTimeout(() => setHasError(false), 500);
-    return;
-  }
-
-  // Validate password strength
-  const passwordError = validatePasswordStrength(password);
-  if (passwordError) {
-    setErrorMessage(passwordError);
-    setHasError(true);
-    setTimeout(() => setHasError(false), 500);
-    return;
-  }
-
-  setIsLoading(true);
-  setErrorMessage("");
-  setSuccessMessage("");
-
-  try {
-    // PERBAIKAN: Kirim password asli, biarkan backend yang hash
-    const response = await axios.post(`${API_BASE_URL}/auth/register`, {
-      email,
-      password  // ← Kirim password asli, bukan passwordHash
-    });
-
-    const { token, user } = response.data;
+    e.preventDefault();
     
-    // Store token and user data
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
+    const { email, password } = signUpData;
     
-    setSuccessMessage("Registrasi berhasil!");
-    console.log("Registration successful:", { token, user });
-    
-    // Reset form
-    setSignUpData({ email: "", password: "" });
-    
-    // Redirect to home page after successful registration
-    setTimeout(() => {
-      navigate("/");
-      window.location.reload();
-    }, 1000);
-    
-  } catch (error: any) {
-    console.error("Registration error:", error);
-    if (error.response?.data?.msg) {
-      setErrorMessage(error.response.data.msg);
-    } else if (error.response?.data?.errors) {
-      setErrorMessage(error.response.data.errors[0].msg);
-    } else {
-      setErrorMessage("Terjadi kesalahan saat registrasi");
+    if (!email || !password) {
+      setErrorMessage("Email dan password harus diisi");
+      setHasError(true);
+      setTimeout(() => setHasError(false), 500);
+      return;
     }
-    setHasError(true);
-    setTimeout(() => setHasError(false), 500);
-  } finally {
-    setIsLoading(false);
+
+    // Validate password strength
+    const passwordError = validatePasswordStrength(password);
+    if (passwordError) {
+      setErrorMessage(passwordError);
+      setHasError(true);
+      setTimeout(() => setHasError(false), 500);
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    try {
+      console.log("Attempting registration with:", { email }); // Don't log password
+      
+      const response = await axios.post(`${API_BASE_URL}/auth/register`, {
+        email,
+        password
+      });
+
+      console.log("Registration response:", response.data);
+
+      const { token, user } = response.data;
+      
+      if (token && user) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        
+        setSuccessMessage("Registrasi berhasil!");
+        setSignUpData({ email: "", password: "" });
+        
+        // FIXED: Remove window.location.reload() and use navigate with replace
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 1500); // Give user time to see success message
+      } else {
+        throw new Error("Invalid response from server");
+      }
+      
+    } catch (error: any) {
+      console.error("Registration error:", error);
+      
+      let errorMsg = "Terjadi kesalahan saat registrasi";
+      
+      if (error.code === 'ERR_NETWORK') {
+        errorMsg = "Tidak dapat terhubung ke server. Pastikan server berjalan di http://localhost:5000";
+      } else if (error.response?.data?.msg) {
+        errorMsg = error.response.data.msg;
+      } else if (error.response?.data?.message) {
+        errorMsg = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        errorMsg = error.response.data.errors[0].msg;
+      }
+      
+      setErrorMessage(errorMsg);
+      setHasError(true);
+      setTimeout(() => setHasError(false), 500);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Show loading screen while checking auth
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
   }
-};
 
   return (
     <div className="min-h-screen font-['Poppins']">

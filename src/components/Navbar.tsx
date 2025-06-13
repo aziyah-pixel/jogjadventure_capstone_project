@@ -16,7 +16,7 @@ function Navbar() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
-    
+
     if (token && userData) {
       setIsLoggedIn(true);
       setUser(JSON.parse(userData));
@@ -111,9 +111,12 @@ function Navbar() {
         <Link to="/" className="text-2xl font-bold font-montserrat text-white">
           Jogjadventure<span className="text-white">.</span>
         </Link>
-        
+
         <div className="md:flex gap-6 text-sm mt-1.5">
-          <Link to="/" className="cursor-pointer hover:text-secondary transition">
+          <Link
+            to="/"
+            className="cursor-pointer hover:text-secondary transition"
+          >
             Home
           </Link>
           <Link
@@ -144,9 +147,9 @@ function Navbar() {
               className="flex items-center gap-2 text-white hover:text-secondary transition"
             >
               <FaRegUserCircle className="text-2xl" />
-              <span className="text-sm">{user?.username || 'User'}</span>
+              <span className="text-sm">{user?.username || "User"}</span>
             </button>
-            
+
             {/* Profile Dropdown */}
             {showProfileDropdown && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
@@ -173,7 +176,9 @@ function Navbar() {
               className={`absolute h-full w-[90px] rounded-md transition-all duration-500 ease-in-out z-0 bg-secondary`}
               style={{
                 transform:
-                  hovered === "register" ? "translateX(106px)" : "translateX(0px)",
+                  hovered === "register"
+                    ? "translateX(106px)"
+                    : "translateX(0px)",
               }}
             />
             <Link
@@ -212,28 +217,19 @@ function Navbar() {
           <Link to="/" className="block px-4 py-2 hover:bg-gray-200">
             Home
           </Link>
-          <Link
-            to="/destination"
-            className="block px-4 py-2 hover:bg-gray-200"
-          >
+          <Link to="/destination" className="block px-4 py-2 hover:bg-gray-200">
             Destinations
           </Link>
           <Link to="/about" className="block px-4 py-2 hover:bg-gray-200">
             About
           </Link>
-          <Link
-            to="/faq"
-            className="block px-4 py-2 hover:bg-gray-200"
-          >
+          <Link to="/faq" className="block px-4 py-2 hover:bg-gray-200">
             FAQ & Bantuan
           </Link>
-          
+
           {isLoggedIn ? (
             <>
-              <Link
-                to="/profile"
-                className="block px-4 py-2 hover:bg-gray-200"
-              >
+              <Link to="/profile" className="block px-4 py-2 hover:bg-gray-200">
                 Profile
               </Link>
               <button
