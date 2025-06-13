@@ -30,9 +30,15 @@ router.get('/', async (req, res) => {
     }
     if (minRating) filter.rating = { $gte: Number(minRating) };
     
-    // Text search
+    // Text search - improved search logic
     if (search) {
-      filter.$text = { $search: search };
+      filter.$or = [
+        { place_name: new RegExp(search, 'i') },
+        { description: new RegExp(search, 'i') },
+        { city: new RegExp(search, 'i') },
+        { category: new RegExp(search, 'i') },
+        { address: new RegExp(search, 'i') }
+      ];
     }
 
     // Sort options
@@ -62,15 +68,48 @@ router.get('/', async (req, res) => {
 
     const total = await Destination.countDocuments(filter);
 
+    // Transform data to match frontend format
+    const transformedDestinations = destinations.map(dest => ({
+      id: dest._id,
+      name: dest.place_name,
+      description: dest.description,
+      location: `${dest.city}, ${dest.city_new}`,
+      rating: dest.rating || dest.average_rating,
+      duration: dest.duration || "2-3 jam", // Default if not available
+      image: dest.images && dest.images.length > 0 ? dest.images[0] : `https://picsum.photos/400/300?random=${dest._id}`,
+      category: dest.category,
+      price: dest.price ? `Rp ${dest.price.toLocaleString('id-ID')}` : 'Gratis',
+      gallery: dest.images && dest.images.length > 0 ? dest.images : [
+        `https://picsum.photos/600/400?random=${dest._id}1`,
+        `https://picsum.photos/600/400?random=${dest._id}2`,
+        `https://picsum.photos/600/400?random=${dest._id}3`,
+        `https://picsum.photos/600/400?random=${dest._id}4`
+      ],
+      facilities: dest.facilities || ["Parkir", "Toilet", "Restoran"],
+      activities: dest.activities || ["Wisata", "Fotografi"],
+      openingHours: dest.operating_hours || "08:00 - 17:00 WIB",
+      contact: dest.contact || "+62 274 000000",
+      website: dest.website,
+      bestTime: dest.best_time || "Pagi dan sore hari",
+      capacity: dest.capacity || "Unlimited",
+      detailedDescription: dest.description,
+      tips: dest.tips || ["Bawa kamera", "Datang pagi hari"],
+      coordinates: {
+        lat: dest.coordinate?.coordinates ? dest.coordinate.coordinates[1] : dest.latitude,
+        lng: dest.coordinate?.coordinates ? dest.coordinate.coordinates[0] : dest.longitude
+      }
+    }));
+
     res.json({
-      destinations,
-      currentPage: page,
+      destinations: transformedDestinations,
+      currentPage: parseInt(page),
       totalPages: Math.ceil(total / limit),
       totalDestinations: total,
       hasNext: page < Math.ceil(total / limit),
       hasPrev: page > 1
     });
   } catch (error) {
+    console.error('Error fetching destinations:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -92,13 +131,81 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Destination not found' });
     }
 
-    res.json(destination);
+    // Transform single destination data
+    const transformedDestination = {
+      id: destination._id,
+      name: destination.place_name,
+      description: destination.description,
+      location: `${destination.city}, ${destination.city_new}`,
+      rating: destination.rating || destination.average_rating,
+      duration: destination.duration || "2-3 jam",
+      image: destination.images && destination.images.length > 0 ? destination.images[0] : `https://picsum.photos/400/300?random=${destination._id}`,
+      category: destination.category,
+      price: destination.price ? `Rp ${destination.price.toLocaleString('id-ID')}` : 'Gratis',
+      gallery: destination.images && destination.images.length > 0 ? destination.images : [
+        `https://picsum.photos/600/400?random=${destination._id}1`,
+        `https://picsum.photos/600/400?random=${destination._id}2`,
+        `https://picsum.photos/600/400?random=${destination._id}3`,
+        `https://picsum.photos/600/400?random=${destination._id}4`
+      ],
+      facilities: destination.facilities || ["Parkir", "Toilet", "Restoran"],
+      activities: destination.activities || ["Wisata", "Fotografi"],
+      openingHours: destination.operating_hours || "08:00 - 17:00 WIB",
+      contact: destination.contact || "+62 274 000000",
+      website: destination.website,
+      bestTime: destination.best_time || "Pagi dan sore hari",
+      capacity: destination.capacity || "Unlimited",
+      detailedDescription: destination.description,
+      tips: destination.tips || ["Bawa kamera", "Datang pagi hari"],
+      coordinates: {
+        lat: destination.coordinate?.coordinates ? destination.coordinate.coordinates[1] : destination.latitude,
+        lng: destination.coordinate?.coordinates ? destination.coordinate.coordinates[0] : destination.longitude
+      },
+      reviews: destination.reviews
+    };
+
+    res.json(transformedDestination);
   } catch (error) {
+    console.error('Error fetching destination:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// GET /api/destinations/search/suggestions - Search suggestions
+// GET /api/destinations/search-suggestions - Search suggestions (Updated endpoint)
+router.get('/search-suggestions', async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q || q.length < 2) {
+      return res.json({ suggestions: [] });
+    }
+
+    const suggestions = await Destination.find({
+      $or: [
+        { place_name: new RegExp(q, 'i') },
+        { city: new RegExp(q, 'i') },
+        { category: new RegExp(q, 'i') },
+        { description: new RegExp(q, 'i') }
+      ]
+    })
+    .select('place_name city category images description')
+    .limit(8);
+
+    // Transform suggestions to match frontend format
+    const transformedSuggestions = suggestions.map(suggestion => ({
+      name: suggestion.place_name,
+      location: suggestion.city,
+      category: suggestion.category,
+      image: suggestion.images && suggestion.images.length > 0 ? suggestion.images[0] : null
+    }));
+
+    res.json({ suggestions: transformedSuggestions });
+  } catch (error) {
+    console.error('Error fetching suggestions:', error);
+    res.status(500).json({ error: error.message, suggestions: [] });
+  }
+});
+
+// GET /api/destinations/search/suggestions - Keep old endpoint for backward compatibility
 router.get('/search/suggestions', async (req, res) => {
   try {
     const { q } = req.query;
