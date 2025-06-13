@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
-import { FaEnvelope, FaLock, FaGoogle, FaFacebookF } from "react-icons/fa";
-import { useSearchParams } from "react-router-dom";
+import { FaEnvelope, FaLock, FaGoogle, FaFacebookF, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "./Navbar";
 import "../index.css";
+
+// API Base URL
+const API_BASE_URL = "http://localhost:5000/api";
 
 // Props type for InputField component
 type InputFieldProps = {
@@ -11,6 +15,8 @@ type InputFieldProps = {
   Icon: React.ElementType;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  showPassword?: boolean;
+  onTogglePassword?: () => void;
 };
 
 // Reusable input field component
@@ -20,23 +26,41 @@ const InputField = ({
   Icon,
   value,
   onChange,
+  showPassword,
+  onTogglePassword,
 }: InputFieldProps) => (
   <div className="relative w-full focus-within:ring-2 focus-within:ring-secondary rounded-[10px] transition duration-300">
     <input
-      type={type}
+      type={type === "password" && showPassword ? "text" : type}
       placeholder={placeholder}
       value={value}
       onChange={onChange}
       className="h-11 w-full bg-zinc-300 rounded-[10px] px-4 pr-10 outline-none"
     />
-    <Icon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600" />
+    {type === "password" ? (
+      <button
+        type="button"
+        onClick={onTogglePassword}
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 focus:outline-none"
+      >
+        {showPassword ? <FaEyeSlash /> : <FaEye />}
+      </button>
+    ) : (
+      <Icon className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600" />
+    )}
   </div>
 );
 
 const AuthForm = () => {
   const [isActive, setIsActive] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showSignInPassword, setShowSignInPassword] = useState(false);
+  const [showSignUpPassword, setShowSignUpPassword] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   // Input state types
   type AuthData = {
@@ -54,37 +78,216 @@ const AuthForm = () => {
     password: "",
   });
 
-  // Baca mode dari query string, update isActive saat komponen mount
+  // Password hashing function (consistent with ProfilePage)
+  const hashPassword = async (password: string, salt?: string): Promise<{ hash: string, salt: string }> => {
+    // Generate salt if not provided
+    const saltToUse = salt || Array.from(crypto.getRandomValues(new Uint8Array(16)))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+    
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password + saltToUse);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    
+    return { hash, salt: saltToUse };
+  };
+
+  // Strong password validation
+  const validatePasswordStrength = (password: string): string => {
+    if (password.length < 6) {
+      return 'Password must be at least 6 characters long';
+    }
+    if (!/[A-Z]/.test(password)) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!/[a-z]/.test(password)) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    if (!/[0-9]/.test(password)) {
+      return 'Password must contain at least one number';
+    }
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      return 'Password must contain at least one special character';
+    }
+    return '';
+  };
+
+  const getPasswordStrengthColor = (password: string) => {
+    const score = [
+      password.length >= 6,
+      /[A-Z]/.test(password),
+      /[a-z]/.test(password),
+      /[0-9]/.test(password),
+      /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+    ].filter(Boolean).length;
+
+    if (score <= 2) return 'text-red-500';
+    if (score <= 3) return 'text-yellow-500';
+    if (score <= 4) return 'text-blue-500';
+    return 'text-green-500';
+  };
+
+  const getPasswordStrengthText = (password: string) => {
+    const score = [
+      password.length >= 6,
+      /[A-Z]/.test(password),
+      /[a-z]/.test(password),
+      /[0-9]/.test(password),
+      /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+    ].filter(Boolean).length;
+
+    if (score <= 2) return 'Weak';
+    if (score <= 3) return 'Fair';
+    if (score <= 4) return 'Good';
+    return 'Strong';
+  };
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/"); // Redirect to home if already logged in
+    }
+  }, [navigate]);
+
+  // Read mode from query string, update isActive when component mounts
   useEffect(() => {
     const mode = searchParams.get("mode");
     if (mode === "signin") {
-      setIsActive(true); // artinya tampilkan Sign In
+      setIsActive(true); // show Sign In
     } else {
-      setIsActive(false); // default ke Sign Up
+      setIsActive(false); // default to Sign Up
     }
   }, [searchParams]);
 
-  const handleSignInSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const { email, password } = signInData;
-    if (!email || !password) {
-      setHasError(true);
-      setTimeout(() => setHasError(false), 500);
-    } else {
-      console.log("Sign In Data:", signInData);
+  // Clear messages after some time
+  useEffect(() => {
+    if (errorMessage || successMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage("");
+        setSuccessMessage("");
+      }, 5000);
+      return () => clearTimeout(timer);
     }
-  };
+  }, [errorMessage, successMessage]);
 
-  const handleSignUpSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const { email, password } = signUpData;
-    if (!email || !password) {
-      setHasError(true);
-      setTimeout(() => setHasError(false), 500);
+  const handleSignInSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  const { email, password } = signInData;
+  
+  if (!email || !password) {
+    setErrorMessage("Email dan password harus diisi");
+    setHasError(true);
+    setTimeout(() => setHasError(false), 500);
+    return;
+  }
+
+  setIsLoading(true);
+  setErrorMessage("");
+  setSuccessMessage("");
+
+  try {
+    // PERBAIKAN: Kirim password asli untuk login juga
+    const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+      email,
+      password  // ← Kirim password asli
+    });
+
+    const { token, user } = response.data;
+    
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    
+    setSuccessMessage("Login berhasil!");
+    setSignInData({ email: "", password: "" });
+    
+    setTimeout(() => {
+      navigate("/");
+      window.location.reload();
+    }, 1000);
+    
+  } catch (error: any) {
+    console.error("Login error:", error);
+    if (error.response?.data?.msg) {
+      setErrorMessage(error.response.data.msg);
+    } else if (error.response?.data?.errors) {
+      setErrorMessage(error.response.data.errors[0].msg);
     } else {
-      console.log("Sign Up Data:", signUpData);
+      setErrorMessage("Terjadi kesalahan saat login");
     }
-  };
+    setHasError(true);
+    setTimeout(() => setHasError(false), 500);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+  const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  const { email, password } = signUpData;
+  
+  if (!email || !password) {
+    setErrorMessage("Email dan password harus diisi");
+    setHasError(true);
+    setTimeout(() => setHasError(false), 500);
+    return;
+  }
+
+  // Validate password strength
+  const passwordError = validatePasswordStrength(password);
+  if (passwordError) {
+    setErrorMessage(passwordError);
+    setHasError(true);
+    setTimeout(() => setHasError(false), 500);
+    return;
+  }
+
+  setIsLoading(true);
+  setErrorMessage("");
+  setSuccessMessage("");
+
+  try {
+    // PERBAIKAN: Kirim password asli, biarkan backend yang hash
+    const response = await axios.post(`${API_BASE_URL}/auth/register`, {
+      email,
+      password  // ← Kirim password asli, bukan passwordHash
+    });
+
+    const { token, user } = response.data;
+    
+    // Store token and user data
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    
+    setSuccessMessage("Registrasi berhasil!");
+    console.log("Registration successful:", { token, user });
+    
+    // Reset form
+    setSignUpData({ email: "", password: "" });
+    
+    // Redirect to home page after successful registration
+    setTimeout(() => {
+      navigate("/");
+      window.location.reload();
+    }, 1000);
+    
+  } catch (error: any) {
+    console.error("Registration error:", error);
+    if (error.response?.data?.msg) {
+      setErrorMessage(error.response.data.msg);
+    } else if (error.response?.data?.errors) {
+      setErrorMessage(error.response.data.errors[0].msg);
+    } else {
+      setErrorMessage("Terjadi kesalahan saat registrasi");
+    }
+    setHasError(true);
+    setTimeout(() => setHasError(false), 500);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen font-['Poppins']">
@@ -102,6 +305,21 @@ const AuthForm = () => {
           backgroundAttachment: "fixed",
         }}
       >
+        {/* Error/Success Messages */}
+        {(errorMessage || successMessage) && (
+          <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
+            <div
+              className={`px-6 py-3 rounded-lg shadow-lg ${
+                errorMessage
+                  ? "bg-red-500 text-white"
+                  : "bg-green-500 text-white"
+              }`}
+            >
+              {errorMessage || successMessage}
+            </div>
+          </div>
+        )}
+
         <div className="relative w-[834px] h-[530px] bg-white/95 backdrop-blur-sm rounded-[30px] shadow-xl m-2.5 overflow-hidden max-sm:h-[calc(100vh-120px)]">
           {/* Sign Up Form */}
           <div
@@ -131,20 +349,34 @@ const AuthForm = () => {
                     setSignUpData({ ...signUpData, email: e.target.value })
                   }
                 />
-                <InputField
-                  type="password"
-                  placeholder="Password"
-                  Icon={FaLock}
-                  value={signUpData.password}
-                  onChange={(e) =>
-                    setSignUpData({ ...signUpData, password: e.target.value })
-                  }
-                />
+                <div className="w-full">
+                  <InputField
+                    type="password"
+                    placeholder="Password"
+                    Icon={FaLock}
+                    value={signUpData.password}
+                    onChange={(e) =>
+                      setSignUpData({ ...signUpData, password: e.target.value })
+                    }
+                    showPassword={showSignUpPassword}
+                    onTogglePassword={() => setShowSignUpPassword(!showSignUpPassword)}
+                  />
+                  {signUpData.password && (
+                    <div className="mt-1 text-left text-xs">
+                      <span className={`font-medium ${getPasswordStrengthColor(signUpData.password)}`}>
+                        Strength: {getPasswordStrengthText(signUpData.password)}
+                      </span>
+                    </div>
+                  )}
+                </div>
                 <button
                   type="submit"
-                  className="bg-secondary text-white py-2.5 rounded-[10px] mt-2 w-full cursor-pointer hover:opacity-90 transition"
+                  disabled={isLoading}
+                  className={`bg-secondary text-white py-2.5 rounded-[10px] mt-2 w-full cursor-pointer hover:opacity-90 transition ${
+                    isLoading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
-                  Sign Up
+                  {isLoading ? "Loading..." : "Sign Up"}
                 </button>
               </form>
               <div className="mt-4 text-sm text-gray-500">or register with</div>
@@ -195,12 +427,17 @@ const AuthForm = () => {
                   onChange={(e) =>
                     setSignInData({ ...signInData, password: e.target.value })
                   }
+                  showPassword={showSignInPassword}
+                  onTogglePassword={() => setShowSignInPassword(!showSignInPassword)}
                 />
                 <button
                   type="submit"
-                  className="bg-secondary text-white py-2.5 rounded-[10px] mt-2 w-full cursor-pointer hover:opacity-90 transition"
+                  disabled={isLoading}
+                  className={`bg-secondary text-white py-2.5 rounded-[10px] mt-2 w-full cursor-pointer hover:opacity-90 transition ${
+                    isLoading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
-                  Sign In
+                  {isLoading ? "Loading..." : "Sign In"}
                 </button>
               </form>
               <div className="mt-4 text-sm text-gray-500">or sign in with</div>
@@ -238,6 +475,9 @@ const AuthForm = () => {
                   const newMode = isActive ? "signup" : "signin";
                   setSearchParams({ mode: newMode });
                   setIsActive(!isActive);
+                  // Clear messages when switching
+                  setErrorMessage("");
+                  setSuccessMessage("");
                 }}
                 className="mt-6 border border-white px-5 py-2.5 rounded-[10px] cursor-pointer hover:bg-white hover:text-secondary transition"
               >

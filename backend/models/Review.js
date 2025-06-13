@@ -1,4 +1,6 @@
 // models/Review.js
+const mongoose = require('mongoose');
+
 const reviewSchema = new mongoose.Schema({
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -19,7 +21,8 @@ const reviewSchema = new mongoose.Schema({
   comment: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    maxlength: 1000
   },
   images: [{
     type: String // URL gambar review
@@ -27,6 +30,10 @@ const reviewSchema = new mongoose.Schema({
   helpful_count: {
     type: Number,
     default: 0
+  },
+  is_approved: {
+    type: Boolean,
+    default: true // Auto approve, bisa diubah ke false jika perlu moderasi
   },
   created_at: {
     type: Date,
@@ -38,7 +45,13 @@ const reviewSchema = new mongoose.Schema({
   }
 });
 
-// Prevent duplicate review dari user yang sama
+// Prevent duplicate review dari user yang sama untuk destination yang sama
 reviewSchema.index({ user_id: 1, destination_id: 1 }, { unique: true });
+
+// Middleware untuk update updated_at
+reviewSchema.pre('save', function(next) {
+  this.updated_at = new Date();
+  next();
+});
 
 module.exports = mongoose.model('Review', reviewSchema);

@@ -4,22 +4,25 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
-
 // Import routes
 const destinationRoutes = require('./routes/destinations');
-const userRoutes = require('./routes/users');
-const reviewRoutes = require('./routes/reviews');
+// const reviewRoutes = require('./routes/reviews');
 const authRoutes = require('./routes/auth');
+const profileRoutes = require("./routes/profile");
 
 dotenv.config();
-
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173', // Vite default port
+    process.env.FRONTEND_URL
+  ].filter(Boolean), // Remove any undefined values
   credentials: true
 }));
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -33,9 +36,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Routes
 app.use('/api/destinations', destinationRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/reviews', reviewRoutes);
+// app.use('/api/reviews', reviewRoutes);
 app.use('/api/auth', authRoutes);
+app.use("/api/profile", profileRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
