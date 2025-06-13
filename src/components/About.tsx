@@ -110,7 +110,7 @@ function About() {
       name: "Aulaa Mustika",
       position: "Machine Learning Engineer",
       description: "Machine Learning Engineer yang berfokus pada pengembangan model AI",
-      image: "/public/ourteam/raya.jpg",
+      image: "/public/ourteam/aula.png",
       socials: {
         github: "https://github.com/AulaaMustika36",
         linkedin: "https://www.linkedin.com/in/aulaa-mustika-228363248/",
@@ -121,7 +121,7 @@ function About() {
       name: "Optra Dananjaya",
       position: "Machine Learning Engineer",
       description: "Machine Learning Engineer yang berfokus pada pengembangan model AI",
-      image: "/public/ourteam/raya.jpg",
+      image: "/public/ourteam/optra.png",
       socials: {
         github: "https://github.com/Optra123",
         linkedin: "https://www.linkedin.com/in/optra-dananjaya/",
@@ -132,7 +132,7 @@ function About() {
       name: "Nanda Nur Aziyah",
       position: "Front-End Developer",
       description: "Desainer UI/UX yang berfokus pada pengalaman pengguna",
-      image: "/public/ourteam/raya.jpg",
+      image: "/public/ourteam/nanda.png",
       socials: {
         github: "https://github.com/aziyah-pixel",
         linkedin: "https://www.linkedin.com/in/nanda-aziyah-76a8b9346/",
