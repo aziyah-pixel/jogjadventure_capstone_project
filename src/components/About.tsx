@@ -132,7 +132,7 @@ function About() {
       name: "Nanda Nur Aziyah",
       position: "Front-End Developer",
       description: "Desainer UI/UX yang berfokus pada pengalaman pengguna",
-      image: "/public/ourteam/nanda.png",
+      image: "/public/ourteam/nan.png",
       socials: {
         github: "https://github.com/aziyah-pixel",
         linkedin: "https://www.linkedin.com/in/nanda-aziyah-76a8b9346/",
