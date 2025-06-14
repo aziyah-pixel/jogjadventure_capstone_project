@@ -168,7 +168,7 @@ function Navbar() {
             to="/about"
             className="cursor-pointer hover:text-secondary transition"
           >
-            About
+            About Us
           </Link>
           <Link
             to="/faq"

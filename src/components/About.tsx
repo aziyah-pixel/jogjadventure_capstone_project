@@ -12,22 +12,26 @@ import {
   Star,
   Sparkles,
 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Counter animation component
-function AnimatedCounter({ end, duration = 2000 }) {
+interface AnimatedCounterProps {
+  end: number;
+  duration?: number;
+}
+
+function AnimatedCounter({ end, duration = 2000 }: AnimatedCounterProps) {
   const [count, setCount] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
 
   useEffect(() => {
     if (!hasStarted) return;
 
-    let startTime = null;
-    const startCount = 0;
+    let startTime: number | null = null;
 
-    const animate = (currentTime) => {
+    const animate = (currentTime: number) => {
       if (startTime === null) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
 
@@ -51,17 +55,20 @@ function AnimatedCounter({ end, duration = 2000 }) {
 
 // Intersection Observer Hook
 function useIntersectionObserver(threshold = 0.1) {
-  const [isVisible, setIsVisible] = useState({});
+  const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setIsVisible((prev) => ({
-              ...prev,
-              [entry.target.dataset.section]: true,
-            }));
+            const section = (entry.target as HTMLElement).dataset.section;
+            if (section) {
+              setIsVisible((prev) => ({
+                ...prev,
+                [section]: true,
+              }));
+            }
           }
         });
       },
@@ -77,6 +84,45 @@ function useIntersectionObserver(threshold = 0.1) {
   return isVisible;
 }
 
+interface AboutData {
+  story: {
+    title: string;
+    paragraphs: string[];
+  };
+  stats: Array<{
+    icon: typeof Users;
+    number: number;
+    suffix: string;
+    label: string;
+  }>;
+  values: Array<{
+    icon: typeof Heart;
+    title: string;
+    description: string;
+    color: string;
+  }>;
+  team: Array<{
+    name: string;
+    position: string;
+    description: string;
+    image: string;
+    socials: {
+      github?: string;
+      linkedin?: string;
+      instagram?: string;
+    };
+  }>;
+  mission: {
+    title: string;
+    paragraphs: string[];
+  };
+  cta: {
+    title: string;
+    description: string;
+    buttonText: string;
+  };
+}
+
 function About() {
   const navigate = useNavigate();
   const isVisible = useIntersectionObserver();
@@ -86,109 +132,128 @@ function About() {
     window.scrollTo(0, 0);
   }, []);
 
-  const stats = [
-    { icon: Users, number: 10000, suffix: "+", label: "Happy Travelers" },
-    { icon: MapPin, number: 50, suffix: "+", label: "Destinations" },
-    { icon: Award, number: 5, suffix: "", label: "Years Experience" },
-    { icon: Camera, number: 1000, suffix: "+", label: "Memories Created" },
-  ];
-
-  const team = [
-    {
-      name: "Musyaffa Arwiin Syah Bahtiar",
-      position: "Team Leader & Full-Stack Developer",
-      description: "Ketua tim di Capstone Projek Jogjadventure Dicoding 2025.",
-      image: "/public/ourteam/musyaffa.jpg",
-      socials: {
-        github: "https://github.com/Musyaffaa2/",
-        linkedin: "https://www.linkedin.com/in/musyaffa-arwiin",
-        instagram: "https://instagram.com/yaaffaaa_",
+  const aboutData: AboutData = {
+    story: {
+      title: "Our Story",
+      paragraphs: [
+        "Jogjadventure lahir dari kecintaan mendalam terhadap Yogyakarta – kota istimewa yang kaya akan budaya, sejarah, dan keindahan alam. Dimulai pada tahun 2019, kami adalah sekelompok anak muda lokal yang bersemangat berbagi pesona Jogja dengan dunia.",
+        "Dari jalanan Malioboro yang ramai hingga keheningan Candi Borobudur di pagi hari, dari petualangan seru di Goa Jomblang hingga sunset romantis di Pantai Parangtritis – kami percaya setiap sudut Jogja memiliki cerita yang layak untuk dibagikan."
+      ]
+    },
+    stats: [
+      { icon: Users, number: 10000, suffix: "+", label: "Happy Travelers" },
+      { icon: MapPin, number: 50, suffix: "+", label: "Destinations" },
+      { icon: Award, number: 5, suffix: "", label: "Years Experience" },
+      { icon: Camera, number: 1000, suffix: "+", label: "Memories Created" },
+    ],
+    values: [
+      {
+        icon: Heart,
+        title: "Passion for Jogja",
+        description:
+          "Kami lahir dan besar di Jogja, memahami setiap sudut kota istimewa ini dengan hati",
+        color: "from-red-400 to-pink-600",
       },
-    },
-    {
-      name: "Soraya Indah Setiani",
-      position: "Deputy Team Leader & Machine Learning Engineer",
-      description:
-        "Wakil Ketua tim di Capstone Projek Jogjadventure Dicoding 2025.",
-      image: "/public/ourteam/raya.jpg",
-      socials: {
-        github: "https://github.com/sorayaindahs",
-        linkedin: "https://www.linkedin.com/in/sorayaindahs/",
-        instagram: "http://instagram.com/soraaya.aa",
+      {
+        icon: Users,
+        title: "Personal Touch",
+        description:
+          "Setiap perjalanan dirancang khusus sesuai minat dan kebutuhan Anda",
+        color: "from-blue-400 to-indigo-600",
       },
-    },
-    {
-      name: "Aulaa Mustika",
-      position: "Machine Learning Engineer",
-      description:
-        "Machine Learning Engineer yang berfokus pada pengembangan model AI",
-      image: "/public/ourteam/aula.png",
-      socials: {
-        github: "https://github.com/AulaaMustika36",
-        linkedin: "https://www.linkedin.com/in/aulaa-mustika-228363248/",
-        instagram: "https://www.instagram.com/aul_aa.ami?igsh=dHYzenFiazNqd290",
+      {
+        icon: Globe,
+        title: "Authentic Experience",
+        description:
+          "Menghadirkan pengalaman otentik yang tidak bisa Anda dapatkan dari tempat lain",
+        color: "from-green-400 to-teal-600",
       },
-    },
-    {
-      name: "Optra Dananjaya",
-      position: "Machine Learning Engineer",
-      description:
-        "Machine Learning Engineer yang berfokus pada pengembangan model AI",
-      image: "/public/ourteam/optra.png",
-      socials: {
-        github: "https://github.com/Optra123",
-        linkedin: "https://www.linkedin.com/in/optra-dananjaya/",
-        instagram: "https://www.instagram.com/merhmerah/",
+    ],
+    team: [
+      {
+        name: "Musyaffa Arwiin Syah Bahtiar",
+        position: "Team Leader & Full-Stack Developer",
+        description: "Ketua tim di Capstone Projek Jogjadventure Dicoding 2025.",
+        image: "/public/ourteam/musyaffa.jpg",
+        socials: {
+          github: "https://github.com/Musyaffaa2/",
+          linkedin: "https://www.linkedin.com/in/musyaffa-arwiin",
+          instagram: "https://instagram.com/yaaffaaa_",
+        },
       },
-    },
-    {
-      name: "Nanda Nur Aziyah",
-      position: "Front-End Developer",
-      description: "Desainer UI/UX yang berfokus pada pengalaman pengguna",
-      image: "/public/ourteam/nan.png",
-      socials: {
-        github: "https://github.com/aziyah-pixel",
-        linkedin: "https://www.linkedin.com/in/nanda-aziyah-76a8b9346/",
-        instagram: "https://www.instagram.com/aziyahnanda12",
+      {
+        name: "Soraya Indah Setiani",
+        position: "Deputy Team Leader & Machine Learning Engineer",
+        description:
+          "Wakil Ketua tim di Capstone Projek Jogjadventure Dicoding 2025.",
+        image: "/public/ourteam/raya.jpg",
+        socials: {
+          github: "https://github.com/sorayaindahs",
+          linkedin: "https://www.linkedin.com/in/sorayaindahs/",
+          instagram: "http://instagram.com/soraaya.aa",
+        },
       },
-    },
-    {
-      name: "Moh. Musayffak",
-      position: " Back-End Developer & User Interface Designer",
-      description:
-        "Back-End Developer yang berfokus pada pengembangan API dan integrasi sistem",
-      image: "/public/ourteam/raya.jpg",
-      socials: {
-        github: "https://github.com/msyfk",
-        linkedin: "https://www.linkedin.com/in/moh-musyaffak-42a3232a9",
-        instagram: "https://instagram.com/ea.msyfkaaa__",
+      {
+        name: "Aulaa Mustika",
+        position: "Machine Learning Engineer",
+        description:
+          "Machine Learning Engineer yang berfokus pada pengembangan model AI",
+        image: "/public/ourteam/aula.png",
+        socials: {
+          github: "https://github.com/AulaaMustika36",
+          linkedin: "https://www.linkedin.com/in/aulaa-mustika-228363248/",
+          instagram: "https://www.instagram.com/aul_aa.ami?igsh=dHYzenFiazNqd290",
+        },
       },
+      {
+        name: "Optra Dananjaya",
+        position: "Machine Learning Engineer",
+        description:
+          "Machine Learning Engineer yang berfokus pada pengembangan model AI",
+        image: "/public/ourteam/optra.png",
+        socials: {
+          github: "https://github.com/Optra123",
+          linkedin: "https://www.linkedin.com/in/optra-dananjaya/",
+          instagram: "https://www.instagram.com/merhmerah/",
+        },
+      },
+      {
+        name: "Nanda Nur Aziyah",
+        position: "Front-End Developer",
+        description: "Desainer UI/UX yang berfokus pada pengalaman pengguna",
+        image: "/public/ourteam/nan.png",
+        socials: {
+          github: "https://github.com/aziyah-pixel",
+          linkedin: "https://www.linkedin.com/in/nanda-aziyah-76a8b9346/",
+          instagram: "https://www.instagram.com/aziyahnanda12",
+        },
+      },
+      {
+        name: "Moh. Musayffak",
+        position: " Back-End Developer & User Interface Designer",
+        description:
+          "Back-End Developer yang berfokus pada pengembangan API dan integrasi sistem",
+        image: "/public/ourteam/raya.jpg",
+        socials: {
+          github: "https://github.com/msyfk",
+          linkedin: "https://www.linkedin.com/in/moh-musyaffak-42a3232a9",
+          instagram: "https://instagram.com/ea.msyfkaaa__",
+        },
+      },
+    ],
+    mission: {
+      title: "Our Mission",
+      paragraphs: [
+        "Misi kami sederhana namun bermakna: memberikan pengalaman wisata yang autentik, berkesan, dan berkelanjutan di Yogyakarta. Kami tidak hanya menunjukkan tempat-tempat indah, tetapi juga berbagi cerita, budaya, dan kehangatan masyarakat Jogja.",
+        "Setiap perjalanan bersama kami adalah undangan untuk merasakan Jogja seperti seorang lokal – dengan hati yang terbuka dan mata yang penuh keajaiban."
+      ]
     },
-  ];
-
-  const values = [
-    {
-      icon: Heart,
-      title: "Passion for Jogja",
-      description:
-        "Kami lahir dan besar di Jogja, memahami setiap sudut kota istimewa ini dengan hati",
-      color: "from-red-400 to-pink-600",
-    },
-    {
-      icon: Users,
-      title: "Personal Touch",
-      description:
-        "Setiap perjalanan dirancang khusus sesuai minat dan kebutuhan Anda",
-      color: "from-blue-400 to-indigo-600",
-    },
-    {
-      icon: Globe,
-      title: "Authentic Experience",
-      description:
-        "Menghadirkan pengalaman otentik yang tidak bisa Anda dapatkan dari tempat lain",
-      color: "from-green-400 to-teal-600",
-    },
-  ];
+    cta: {
+      title: "Ready to Explore Jogja?",
+      description: "Mari bergabung dengan ribuan traveler yang telah merasakan keajaiban Jogja bersama kami",
+      buttonText: "Start Your Journey"
+    }
+  };
 
   // Handler untuk tombol "Start Your Journey" dengan scroll to top
   const handleStartJourney = () => {
@@ -277,21 +342,14 @@ function About() {
             <Heart className="w-8 h-8 text-red-500" />
           </div>
           <h2 className="text-4xl font-bold text-gray-800 mb-8 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-            Our Story
+            {aboutData.story.title}
           </h2>
           <div className="space-y-6">
-            <p className="text-lg text-gray-600 leading-relaxed p-6 bg-white/80 backdrop-blur rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              Jogjadventure lahir dari kecintaan mendalam terhadap Yogyakarta –
-              kota istimewa yang kaya akan budaya, sejarah, dan keindahan alam.
-              Dimulai pada tahun 2019, kami adalah sekelompok anak muda lokal
-              yang bersemangat berbagi pesona Jogja dengan dunia.
-            </p>
-            <p className="text-lg text-gray-600 leading-relaxed p-6 bg-white/80 backdrop-blur rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              Dari jalanan Malioboro yang ramai hingga keheningan Candi
-              Borobudur di pagi hari, dari petualangan seru di Goa Jomblang
-              hingga sunset romantis di Pantai Parangtritis – kami percaya
-              setiap sudut Jogja memiliki cerita yang layak untuk dibagikan.
-            </p>
+            {aboutData.story.paragraphs.map((paragraph, index) => (
+              <p key={index} className="text-lg text-gray-600 leading-relaxed p-6 bg-white/80 backdrop-blur rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                {paragraph}
+              </p>
+            ))}
           </div>
         </div>
 
@@ -305,7 +363,7 @@ function About() {
           }`}
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
+            {aboutData.stats.map((stat, index) => (
               <div
                 key={index}
                 className="text-center group hover:scale-110 transition-all duration-300"
@@ -338,7 +396,7 @@ function About() {
             Why Choose Us
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {values.map((value, index) => (
+            {aboutData.values.map((value, index) => (
               <div
                 key={index}
                 className="group relative overflow-hidden bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2"
@@ -378,7 +436,7 @@ function About() {
             Meet Our Team
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
+            {aboutData.team.map((member, index) => (
               <div
                 key={index}
                 className="group relative overflow-hidden bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105"
@@ -459,21 +517,14 @@ function About() {
                 <Globe className="w-12 h-12 text-white" />
               </div>
               <h2 className="text-4xl font-bold text-gray-800 mb-8 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                Our Mission
+                {aboutData.mission.title}
               </h2>
               <div className="space-y-6">
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  Misi kami sederhana namun bermakna: memberikan pengalaman
-                  wisata yang autentik, berkesan, dan berkelanjutan di
-                  Yogyakarta. Kami tidak hanya menunjukkan tempat-tempat indah,
-                  tetapi juga berbagi cerita, budaya, dan kehangatan masyarakat
-                  Jogja.
-                </p>
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  Setiap perjalanan bersama kami adalah undangan untuk merasakan
-                  Jogja seperti seorang lokal – dengan hati yang terbuka dan
-                  mata yang penuh keajaiban.
-                </p>
+                {aboutData.mission.paragraphs.map((paragraph, index) => (
+                  <p key={index} className="text-lg text-gray-700 leading-relaxed">
+                    {paragraph}
+                  </p>
+                ))}
               </div>
             </div>
           </div>
@@ -489,23 +540,22 @@ function About() {
           }`}
         >
           <div className="bg-gradient-to-r from-orange-600 to-red-600 rounded-3xl p-12 text-white shadow-2xl">
-            <h3 className="text-3xl font-bold mb-4">Ready to Explore Jogja?</h3>
+            <h3 className="text-3xl font-bold mb-4">{aboutData.cta.title}</h3>
             <p className="text-xl mb-8 opacity-90">
-              Mari bergabung dengan ribuan traveler yang telah merasakan
-              keajaiban Jogja bersama kami
+              {aboutData.cta.description}
             </p>
             <button
               onClick={handleStartJourney}
               className="group relative inline-flex items-center gap-3 bg-white text-orange-600 px-10 py-4 rounded-2xl hover:bg-orange-50 transition-all duration-300 font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105"
             >
-              Start Your Journey
+              {aboutData.cta.buttonText}
               <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
             </button>
           </div>
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes fadeIn {
           from {
             opacity: 0;
