@@ -213,7 +213,7 @@ function DestinationApp() {
       </div>
 
       <div className="container mx-auto px-6 py-12">
-        {/* Search & Filter Section */}
+        {/* Search Section */}
         <div className="mb-12">
           <div className="flex flex-col md:flex-row gap-6 items-center mb-8">
             {/* Search Bar */}
@@ -228,25 +228,6 @@ function DestinationApp() {
                 disabled={loading}
               />
             </div>
-          </div>
-
-          {/* Category Filter */}
-          <div className="flex flex-wrap gap-3 mb-6">
-            {categories.map(category => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                disabled={loading}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
-                  selectedCategory === category.id
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-                } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <span>{category.icon}</span>
-                <span>{category.name}</span>
-              </button>
-            ))}
           </div>
         </div>
 
