@@ -132,13 +132,23 @@ function About() {
     window.scrollTo(0, 0);
   }, []);
 
+  const scrollToNextSection = () => {
+    const nextSection = document.querySelector('[data-section="story"]');
+    if (nextSection) {
+      nextSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   const aboutData: AboutData = {
     story: {
       title: "Our Story",
       paragraphs: [
         "Jogjadventure lahir dari kecintaan mendalam terhadap Yogyakarta – kota istimewa yang kaya akan budaya, sejarah, dan keindahan alam. Dimulai pada tahun 2019, kami adalah sekelompok anak muda lokal yang bersemangat berbagi pesona Jogja dengan dunia.",
-        "Dari jalanan Malioboro yang ramai hingga keheningan Candi Borobudur di pagi hari, dari petualangan seru di Goa Jomblang hingga sunset romantis di Pantai Parangtritis – kami percaya setiap sudut Jogja memiliki cerita yang layak untuk dibagikan."
-      ]
+        "Dari jalanan Malioboro yang ramai hingga keheningan Candi Borobudur di pagi hari, dari petualangan seru di Goa Jomblang hingga sunset romantis di Pantai Parangtritis – kami percaya setiap sudut Jogja memiliki cerita yang layak untuk dibagikan.",
+      ],
     },
     stats: [
       { icon: Users, number: 10000, suffix: "+", label: "Happy Travelers" },
@@ -173,7 +183,8 @@ function About() {
       {
         name: "Musyaffa Arwiin Syah Bahtiar",
         position: "Team Leader & Full-Stack Developer",
-        description: "Ketua tim di Capstone Projek Jogjadventure Dicoding 2025.",
+        description:
+          "Ketua tim di Capstone Projek Jogjadventure Dicoding 2025.",
         image: "/public/ourteam/musyaffa.jpg",
         socials: {
           github: "https://github.com/Musyaffaa2/",
@@ -202,7 +213,8 @@ function About() {
         socials: {
           github: "https://github.com/AulaaMustika36",
           linkedin: "https://www.linkedin.com/in/aulaa-mustika-228363248/",
-          instagram: "https://www.instagram.com/aul_aa.ami?igsh=dHYzenFiazNqd290",
+          instagram:
+            "https://www.instagram.com/aul_aa.ami?igsh=dHYzenFiazNqd290",
         },
       },
       {
@@ -245,22 +257,23 @@ function About() {
       title: "Our Mission",
       paragraphs: [
         "Misi kami sederhana namun bermakna: memberikan pengalaman wisata yang autentik, berkesan, dan berkelanjutan di Yogyakarta. Kami tidak hanya menunjukkan tempat-tempat indah, tetapi juga berbagi cerita, budaya, dan kehangatan masyarakat Jogja.",
-        "Setiap perjalanan bersama kami adalah undangan untuk merasakan Jogja seperti seorang lokal – dengan hati yang terbuka dan mata yang penuh keajaiban."
-      ]
+        "Setiap perjalanan bersama kami adalah undangan untuk merasakan Jogja seperti seorang lokal – dengan hati yang terbuka dan mata yang penuh keajaiban.",
+      ],
     },
     cta: {
       title: "Ready to Explore Jogja?",
-      description: "Mari bergabung dengan ribuan traveler yang telah merasakan keajaiban Jogja bersama kami",
-      buttonText: "Start Your Journey"
-    }
+      description:
+        "Mari bergabung dengan ribuan traveler yang telah merasakan keajaiban Jogja bersama kami",
+      buttonText: "Start Your Journey",
+    },
   };
 
   // Handler untuk tombol "Start Your Journey" dengan scroll to top
   const handleStartJourney = () => {
-    navigate('/');
+    navigate("/");
     // Small delay to ensure navigation completes before scrolling
     setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, 100);
   };
 
@@ -322,8 +335,11 @@ function About() {
           >
             Passion meets expertise in every journey
           </p>
-          <div className="animate-bounce mt-12">
-            <ArrowRight className="w-8 h-8 mx-auto rotate-90" />
+          <div
+            className="animate-bounce mt-12 cursor-pointer"
+            onClick={scrollToNextSection}
+          >
+            <ArrowRight className="w-8 h-8 mx-auto rotate-90 hover:text-yellow-300 transition-colors duration-300" />
           </div>
         </div>
       </div>
@@ -341,12 +357,15 @@ function About() {
           <div className="inline-block p-4 bg-gradient-to-r from-orange-100 to-red-100 rounded-full mb-6">
             <Heart className="w-8 h-8 text-red-500" />
           </div>
-          <h2 className="text-4xl font-bold text-gray-800 mb-8 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl font-bold mb-8 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
             {aboutData.story.title}
           </h2>
           <div className="space-y-6">
             {aboutData.story.paragraphs.map((paragraph, index) => (
-              <p key={index} className="text-lg text-gray-600 leading-relaxed p-6 bg-white/80 backdrop-blur rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <p
+                key={index}
+                className="text-lg text-gray-600 leading-relaxed p-6 bg-white/80 backdrop-blur rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              >
                 {paragraph}
               </p>
             ))}
@@ -392,7 +411,7 @@ function About() {
               : "opacity-0 translate-y-10"
           }`}
         >
-          <h2 className="text-4xl font-bold text-center text-gray-800 mb-16 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
             Why Choose Us
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -411,7 +430,7 @@ function About() {
                   >
                     <value.icon className="w-10 h-10" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4 group-hover:text-gray-900 bg-gradient-to-r group-hover:bg-clip-text">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4 group-hover:text-gray-900 transition-colors">
                     {value.title}
                   </h3>
                   <p className="text-gray-600 leading-relaxed">
@@ -432,7 +451,7 @@ function About() {
               : "opacity-0 translate-y-10"
           }`}
         >
-          <h2 className="text-4xl font-bold text-center text-gray-800 mb-16 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
             Meet Our Team
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -516,12 +535,15 @@ function About() {
               <div className="inline-block p-4 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mb-8">
                 <Globe className="w-12 h-12 text-white" />
               </div>
-              <h2 className="text-4xl font-bold text-gray-800 mb-8 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+              <h2 className="text-4xl font-bold mb-8 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
                 {aboutData.mission.title}
               </h2>
               <div className="space-y-6">
                 {aboutData.mission.paragraphs.map((paragraph, index) => (
-                  <p key={index} className="text-lg text-gray-700 leading-relaxed">
+                  <p
+                    key={index}
+                    className="text-lg text-gray-700 leading-relaxed"
+                  >
                     {paragraph}
                   </p>
                 ))}

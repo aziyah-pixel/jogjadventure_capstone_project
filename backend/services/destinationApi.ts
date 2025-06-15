@@ -1,7 +1,6 @@
-// services/destinationApi.ts
 import { Destination, ApiResponse } from '../types/destination';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 export class DestinationApiService {
   static async fetchDestinations(
@@ -43,6 +42,34 @@ export class DestinationApiService {
 
   static async fetchCategories(): Promise<string[]> {
     const response = await fetch(`${API_BASE_URL}/destinations/meta/categories`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return await response.json();
+  }
+
+  // Method baru untuk mengambil destinations berdasarkan rating
+  static async fetchDestinationsByRating(limit: number = 8): Promise<Destination[]> {
+    const params = new URLSearchParams({
+      sort: 'rating',
+      limit: limit.toString()
+    });
+
+    const response = await fetch(`${API_BASE_URL}/destinations?${params}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data: ApiResponse = await response.json();
+    return data.destinations || [];
+  }
+
+  // Method untuk mengambil popular destinations (sudah ada di route Anda)
+  static async fetchPopularDestinations(): Promise<Destination[]> {
+    const response = await fetch(`${API_BASE_URL}/destinations/featured/popular`);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

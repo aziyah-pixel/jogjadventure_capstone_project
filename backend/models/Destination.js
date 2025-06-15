@@ -1,5 +1,3 @@
-// models/Destination.js - UPDATED VERSION
-
 const mongoose = require('mongoose');
 
 const destinationSchema = new mongoose.Schema({

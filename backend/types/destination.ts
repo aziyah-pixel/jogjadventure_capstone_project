@@ -1,4 +1,3 @@
-// types/destination.ts
 export interface Destination {
   id: string;
   place_id: number;

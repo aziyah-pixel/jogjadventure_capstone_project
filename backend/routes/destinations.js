@@ -1,4 +1,4 @@
-// routes/destinations.js - FIXED VERSION
+
 const express = require("express");
 const router = express.Router();
 const Destination = require("../models/Destination");

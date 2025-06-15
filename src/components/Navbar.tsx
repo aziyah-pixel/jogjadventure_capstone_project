@@ -19,7 +19,7 @@ function Navbar() {
       try {
         const token = localStorage.getItem("token");
         const userData = localStorage.getItem("user");
-        
+
         if (token && userData) {
           setIsLoggedIn(true);
           setUser(JSON.parse(userData));
@@ -51,7 +51,7 @@ function Navbar() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
-    
+
     if (token && userData) {
       setIsLoggedIn(true);
       setUser(JSON.parse(userData));
@@ -98,7 +98,7 @@ function Navbar() {
 
   const handleDestinationsClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    
+
     navigate("/destination");
   };
 
@@ -106,15 +106,17 @@ function Navbar() {
     <nav
       className={`fixed top-0 left-0 w-full px-6 md:px-12 py-6 flex justify-between items-center z-50 transition-all duration-300 ${
         scrolled
-          ? "backdrop-blur-md border-b border-white/20 bg-white/5"
-          : "bg-transparent"
+          ? "backdrop-blur-md border-b border-gray-200 bg-white/95 text-black"
+          : "bg-transparent text-white"
       }`}
     >
       {/* Tombol Hamburger untuk Mobile */}
       <div className="md:hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-white focus:outline-none"
+          className={`focus:outline-none ${
+            scrolled ? "text-black" : "text-white"
+          }`}
         >
           {isOpen ? (
             <svg
@@ -151,53 +153,62 @@ function Navbar() {
       </div>
 
       {/* Menu untuk Desktop */}
-      <div className="hidden md:flex gap-6 text-sm text-white justify-between w-full">
-        <Link to="/" className="text-2xl font-bold font-montserrat text-white">
-          Jogjadventure<span className="text-white">.</span>
+      <div className="hidden md:flex items-center justify-between w-full">
+        <Link to="/" className="text-2xl font-bold font-montserrat">
+          Jogjadventure
+          <span className={scrolled ? "text-secondary" : "text-white"}>.</span>
         </Link>
-
-        <div className="md:flex gap-6 text-sm mt-1.5">
+        <div className="flex gap-6 text-sm">
           <Link
             to="/"
-            className="cursor-pointer hover:text-secondary transition"
+            className={`cursor-pointer hover:text-secondary transition ${
+              scrolled ? "text-black" : "text-white"
+            }`}
           >
             Home
           </Link>
-          
-          {/* FIXED: Proper destinations navigation */}
+
+          {/* Destinations navigation */}
           <button
             onClick={handleDestinationsClick}
-            className="cursor-pointer hover:text-secondary transition bg-transparent border-none text-inherit"
+            className={`cursor-pointer hover:text-secondary transition ${
+              scrolled ? "text-black" : "text-white"
+            }`}
           >
-            Destinations
+            Destination
           </button>
-          
+
           <Link
             to="/about"
-            className="cursor-pointer hover:text-secondary transition"
+            className={`cursor-pointer hover:text-secondary transition ${
+              scrolled ? "text-black" : "text-white"
+            }`}
           >
             About Us
           </Link>
           <Link
             to="/faq"
-            className="cursor-pointer hover:text-secondary transition"
+            className={`cursor-pointer hover:text-secondary transition ${
+              scrolled ? "text-black" : "text-white"
+            }`}
           >
             FAQ & Bantuan
           </Link>
         </div>
-
         {/* Auth Buttons or Profile */}
         {isLoggedIn ? (
           <div className="relative">
             <button
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-              className="flex items-center gap-2 text-white hover:text-secondary transition"
+              className={`flex items-center gap-2 hover:text-secondary transition ${
+                scrolled ? "text-black" : "text-white"
+              }`}
             >
               <FaRegUserCircle className="text-2xl" />
               <span className="text-sm">{user?.username || "User"}</span>
             </button>
 
-            {/* Profile Dropdown */}
+            {/* Profile Dropdown tetap sama */}
             {showProfileDropdown && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                 <Link
@@ -236,7 +247,12 @@ function Navbar() {
                 onMouseEnter={() => setHovered("signin")}
                 onMouseLeave={() => setHovered(null)}
                 onClick={createRipple}
-                className="ripple-btn w-full h-full rounded-md text-sm font-semibold text-white cursor-pointer overflow-hidden"
+                className={`ripple-btn w-full h-full rounded-md text-sm font-semibold cursor-pointer overflow-hidden ${
+                  // PERBAIKAN: Jika tidak di-hover dan scrolled, maka hitam. Selainnya putih
+                  hovered === "signin" || !scrolled
+                    ? "text-white"
+                    : "text-black"
+                }`}
               >
                 Sign in
               </button>
@@ -249,7 +265,12 @@ function Navbar() {
                 onMouseEnter={() => setHovered("register")}
                 onMouseLeave={() => setHovered(null)}
                 onClick={createRipple}
-                className="ripple-btn w-full h-full rounded-md text-sm font-semibold text-white cursor-pointer overflow-hidden flex items-center justify-center"
+                className={`ripple-btn w-full h-full rounded-md text-sm font-semibold cursor-pointer overflow-hidden flex items-center justify-center ${
+                  // PERBAIKAN: Jika tidak di-hover dan scrolled, maka hitam. Selainnya putih
+                  hovered === "register" || !scrolled
+                    ? "text-white"
+                    : "text-black"
+                }`}
               >
                 Register
               </button>
@@ -264,8 +285,8 @@ function Navbar() {
           <Link to="/" className="block px-4 py-2 hover:bg-gray-200">
             Home
           </Link>
-          
-          {/* FIXED: Mobile destinations navigation */}
+
+          {/* Mobile destinations navigation */}
           <button
             onClick={(e) => {
               handleDestinationsClick(e);
@@ -273,9 +294,9 @@ function Navbar() {
             }}
             className="w-full text-left px-4 py-2 hover:bg-gray-200"
           >
-            Destinations
+            Destination
           </button>
-          
+
           <Link to="/about" className="block px-4 py-2 hover:bg-gray-200">
             About
           </Link>
