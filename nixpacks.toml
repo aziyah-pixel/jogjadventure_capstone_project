@@ -1,12 +1,15 @@
 [providers]
 node = "18"
 
-[phases.build]
-dependsOn = ["install"]
-cmds = ["echo 'Build completed'"]
+[variables]
+NODE_ENV = "production"
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = ["cd backend && npm ci"]
+
+[phases.build]
+dependsOn = ["install"]
+cmds = ["cd backend && echo 'Build completed'"]
 
 [start]
-cmd = "npm start"
+cmd = "cd backend && npm start"
