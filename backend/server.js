@@ -28,52 +28,6 @@ if (missingEnvVars.length > 0) {
 
 const app = express();
 
-// Trust proxy jika menggunakan reverse proxy (Nginx, load balancer, dll)
-app.set('trust proxy', 1);
-
-// Security Middleware
-app.use(helmet({
-  crossOriginEmbedderPolicy: false, // Disable jika ada masalah dengan embedding
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
-    },
-  },
-}));
-
-// Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 menit
-  max: 100, // Maksimal 100 requests per IP per window
-  message: {
-    success: false,
-    error: 'Terlalu banyak request, coba lagi dalam 15 menit'
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// Rate limiting khusus untuk auth endpoints
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 menit
-  max: 5, // Maksimal 5 attempts per IP per window
-  message: {
-    success: false,
-    error: 'Terlalu banyak percobaan login, coba lagi dalam 15 menit'
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// Apply rate limiting
-app.use(limiter);
-app.use('/api/auth/login', authLimiter);
-app.use('/api/auth/register', authLimiter);
-
-// CORS Configuration
 app.use(cors({
   origin: function (origin, callback) {
     // Daftar domain yang diizinkan
@@ -100,6 +54,54 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Trust proxy jika menggunakan reverse proxy (Nginx, load balancer, dll)
+app.set('trust proxy', 1);
+
+// Security Middleware
+app.use(helmet({
+  crossOriginEmbedderPolicy: false, // Disable jika ada masalah dengan embedding
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:"],
+    },
+  },
+}));
+
+// Rate Limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 menit
+  max: 100, // Maksimal 100 requests per IP per window
+  message: {
+    success: false,
+    error: 'Terlalu banyak request, coba lagi dalam 15 menit'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiting khusus untuk auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 menit
+  max: 5, // Maksimal 5 attempts per IP per window
+  message: {
+    success: false,
+    error: 'Terlalu banyak percobaan login, coba lagi dalam 15 menit'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply rate limiting
+app.use('/api', limiter);
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
+
+// CORS Configuration
+
 
 // Cookie Parser (untuk refresh tokens)
 app.use(cookieParser());

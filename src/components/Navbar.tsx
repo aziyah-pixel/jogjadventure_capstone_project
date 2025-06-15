@@ -13,14 +13,13 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Check if user is logged in - FIXED VERSION
+  // Check if user is logged in
   useEffect(() => {
     const checkAuthStatus = () => {
       try {
         const token = localStorage.getItem("token");
         const userData = localStorage.getItem("user");
         
-        // Only update state, don't redirect from here
         if (token && userData) {
           setIsLoggedIn(true);
           setUser(JSON.parse(userData));
@@ -97,6 +96,12 @@ function Navbar() {
     navigate("/");
   };
 
+  const handleDestinationsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    navigate("/destination");
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 w-full px-6 md:px-12 py-6 flex justify-between items-center z-50 transition-all duration-300 ${
@@ -158,12 +163,15 @@ function Navbar() {
           >
             Home
           </Link>
-          <Link
-            to="/destination"
-            className="cursor-pointer hover:text-secondary transition"
+          
+          {/* FIXED: Proper destinations navigation */}
+          <button
+            onClick={handleDestinationsClick}
+            className="cursor-pointer hover:text-secondary transition bg-transparent border-none text-inherit"
           >
             Destinations
-          </Link>
+          </button>
+          
           <Link
             to="/about"
             className="cursor-pointer hover:text-secondary transition"
@@ -256,9 +264,18 @@ function Navbar() {
           <Link to="/" className="block px-4 py-2 hover:bg-gray-200">
             Home
           </Link>
-          <Link to="/destination" className="block px-4 py-2 hover:bg-gray-200">
+          
+          {/* FIXED: Mobile destinations navigation */}
+          <button
+            onClick={(e) => {
+              handleDestinationsClick(e);
+              setIsOpen(false); // Close mobile menu
+            }}
+            className="w-full text-left px-4 py-2 hover:bg-gray-200"
+          >
             Destinations
-          </Link>
+          </button>
+          
           <Link to="/about" className="block px-4 py-2 hover:bg-gray-200">
             About
           </Link>
