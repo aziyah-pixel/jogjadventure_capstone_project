@@ -26,8 +26,8 @@ const Footer = () => {
             <h4 className="font-semibold mb-3">Contact</h4>
             <ul className="space-y-2 text-sm text-gray-300">
               <li><a href="https://www.instagram.com/jogjaku/" target='blank'>Instagram</a></li>
-              <li><a href="#">Twitter</a></li>
-              <li><a href="#">Facebook</a></li>
+              <li><a href="https://x.com/Jogja24Jam" target='blank'>Twitter</a></li>
+              <li><a href="https://www.facebook.com/groups/955498851537421" target='blank'>Facebook</a></li>
             </ul>
           </div>
 
