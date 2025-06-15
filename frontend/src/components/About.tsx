@@ -230,7 +230,7 @@ function About() {
         },
       },
       {
-        name: "Nanda Nur Aziyah",
+        name: "Nanda Nur",
         position: "Front-End Developer",
         description: "Desainer UI/UX yang berfokus pada pengalaman pengguna",
         image: "/public/ourteam/nan.png",
