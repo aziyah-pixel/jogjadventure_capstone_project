@@ -29,6 +29,9 @@ function DestinationApp() {
     
     if (searchQuery) {
       setSearchTerm(searchQuery);
+      fetchDestinations(1, searchQuery); // Fetch destinations based on the search query
+    } else {
+      fetchDestinations(); // Fetch all destinations if no search query
     }
   }, [location.search]);
 
@@ -95,7 +98,6 @@ function DestinationApp() {
   };
 
   useEffect(() => {
-    fetchDestinations();
     const staticCategories = [
       { id: "all", name: "Semua", icon: "🗺️" },
       { id: "taman-hiburan", name: "Taman Hiburan", icon: "🎢" },
