@@ -1,0 +1,12 @@
+[providers]
+node = "18"
+
+[phases.build]
+dependsOn = ["install"]
+cmds = ["echo 'Build completed'"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[start]
+cmd = "npm start"
