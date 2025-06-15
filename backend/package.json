@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "import-data": "node scripts/importData.js"
+    "import-data": "node scripts/importData.js",
+    "migrate:from-cloudinary": "node utils/migrateFromCloudinary.js",
+    "test:search-image": "node utils/testImageSearch.js",
+    "check:destinations": "node utils/checkDestinations.js",
+    "import:csv": "node utils/importCSV.js",
+    "check:simple": "node utils/simpleCheck.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -16,6 +21,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.0",
+    "cloudinary": "^1.41.0",
     "multer": "^2.0.1"
   },
   "devDependencies": {

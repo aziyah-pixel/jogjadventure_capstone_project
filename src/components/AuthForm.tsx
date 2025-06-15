@@ -128,10 +128,6 @@ const AuthForm = () => {
     return 'Strong';
   };
 
-  // COMPLETELY REMOVED AUTH CHECK FROM AUTHFORM
-  // Let the parent router or app handle redirects based on auth state
-  // AuthForm should only handle the actual authentication logic
-
   // Read mode from query string
   useEffect(() => {
     const mode = searchParams.get("mode");
@@ -161,6 +157,9 @@ const AuthForm = () => {
   const handleSignInSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
+    // Prevent double submission
+    if (isLoading) return;
+    
     const { email, password } = signInData;
     
     if (!email || !password) {
@@ -184,7 +183,18 @@ const AuthForm = () => {
 
       console.log("Login response:", response.data);
 
-      const { token, user } = response.data;
+      // Handle different response structures
+      let token, user;
+      
+      if (response.data.token) {
+        token = response.data.token;
+        user = response.data.user;
+      } else if (response.data.accessToken) {
+        token = response.data.accessToken;
+        user = response.data.user;
+      } else {
+        throw new Error("Token not found in response");
+      }
       
       if (token && user) {
         // Store auth data
@@ -202,7 +212,7 @@ const AuthForm = () => {
           navigate("/", { replace: true });
         }, 1000);
       } else {
-        throw new Error("Invalid response from server");
+        throw new Error("Invalid response structure from server");
       }
       
     } catch (error: any) {
@@ -212,6 +222,8 @@ const AuthForm = () => {
       
       if (error.code === 'ERR_NETWORK') {
         errorMsg = "Tidak dapat terhubung ke server. Pastikan server berjalan di http://localhost:5000";
+      } else if (error.response?.status === 400) {
+        errorMsg = error.response?.data?.message || error.response?.data?.msg || "Email atau password salah";
       } else if (error.response?.data?.msg) {
         errorMsg = error.response.data.msg;
       } else if (error.response?.data?.message) {
@@ -231,6 +243,9 @@ const AuthForm = () => {
   // Sign Up Handler
   const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Prevent double submission
+    if (isLoading) return;
     
     const { email, password } = signUpData;
     
@@ -264,9 +279,22 @@ const AuthForm = () => {
 
       console.log("Registration response:", response.data);
 
-      const { token, user } = response.data;
+      // Handle different response structures from server
+      let token, user;
       
-      if (token && user) {
+      // Check for different token field names
+      if (response.data.token) {
+        token = response.data.token;
+        user = response.data.user;
+      } else if (response.data.accessToken) {
+        token = response.data.accessToken;
+        user = response.data.user;
+      } else {
+        throw new Error("Token not found in response");
+      }
+      
+      // Verify we have the required data
+      if (token && user && response.data.success) {
         // Store auth data
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
@@ -282,7 +310,27 @@ const AuthForm = () => {
           navigate("/", { replace: true });
         }, 1000);
       } else {
-        throw new Error("Invalid response from server");
+        // Handle case where registration was successful but structure is different
+        if (response.data.success && response.data.message === "Registrasi berhasil") {
+          // If the first request succeeded, don't make another request
+          if (response.data.accessToken) {
+            localStorage.setItem("token", response.data.accessToken);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            
+            setSuccessMessage("Registrasi berhasil!");
+            setSignUpData({ email: "", password: "" });
+            
+            window.dispatchEvent(new Event('storage'));
+            
+            setTimeout(() => {
+              navigate("/", { replace: true });
+            }, 1000);
+          } else {
+            throw new Error("Registration successful but token missing");
+          }
+        } else {
+          throw new Error("Invalid response structure from server");
+        }
       }
       
     } catch (error: any) {
@@ -292,6 +340,8 @@ const AuthForm = () => {
       
       if (error.code === 'ERR_NETWORK') {
         errorMsg = "Tidak dapat terhubung ke server. Pastikan server berjalan di http://localhost:5000";
+      } else if (error.response?.status === 400) {
+        errorMsg = error.response?.data?.message || error.response?.data?.msg || "Email sudah terdaftar atau data tidak valid";
       } else if (error.response?.data?.msg) {
         errorMsg = error.response.data.msg;
       } else if (error.response?.data?.message) {
