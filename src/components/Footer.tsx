@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -14,8 +15,8 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-3">About</h4>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><a href="#">About us</a></li>
-              <li><a href="#">Features</a></li>
+              <li><Link to="/about">About us</Link></li>
+              <li><Link to="/destination">Features</Link></li>
               <li><a href="#">News & Blogs</a></li>
             </ul>
           </div>
@@ -24,7 +25,7 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-3">Contact</h4>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><a href="#">Instagram</a></li>
+              <li><a href="https://www.instagram.com/jogjaku/" target='blank'>Instagram</a></li>
               <li><a href="#">Twitter</a></li>
               <li><a href="#">Facebook</a></li>
             </ul>
@@ -34,8 +35,8 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-3">Support</h4>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><a href="#">FAQs</a></li>
-              <li><a href="#">Support Centre</a></li>
+              <li><Link to="/faq">FAQs</Link></li>
+              <li><a  href="tel:+6281234567890">Support Centre</a></li>
               <li><a href="#">Feedback</a></li>
             </ul>
           </div>

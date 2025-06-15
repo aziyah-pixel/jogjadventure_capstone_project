@@ -233,7 +233,7 @@ function About() {
         position: " Back-End Developer & User Interface Designer",
         description:
           "Back-End Developer yang berfokus pada pengembangan API dan integrasi sistem",
-        image: "/public/ourteam/raya.jpg",
+        image: "/public/ourteam/safak.jpg",
         socials: {
           github: "https://github.com/msyfk",
           linkedin: "https://www.linkedin.com/in/moh-musyaffak-42a3232a9",
