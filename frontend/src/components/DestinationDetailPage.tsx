@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { DestinationApiService } from '../../backend/services/destinationApi';
+import { DestinationApiService } from '../services/destinationApi';
 import DestinationDetail from './DestinationDetail';
-import type { Destination } from '../../backend/types/destination'; 
+import type { Destination } from '../types/destination'; 
 
 function DestinationDetailPage() {
   const { id } = useParams<{ id: string }>(); 

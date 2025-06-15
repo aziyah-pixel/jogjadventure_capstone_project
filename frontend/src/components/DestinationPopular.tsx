@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { DestinationApiService } from "../../backend/services/destinationApi";
+import { DestinationApiService } from "../services/destinationApi";
 
 // Define the type for destination data
 interface Destination {

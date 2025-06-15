@@ -1,8 +1,8 @@
 // components/DestinationListPage.tsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DestinationApiService } from '../../backend/services/destinationApi';
-import { Destination } from '../../backend/types/destination';
+import { DestinationApiService } from '../services/destinationApi';
+import { Destination } from '../types/destination';
 import DestinationList from './DestinationList';
 import Navbar from './Navbar';
 

@@ -1,8 +1,8 @@
 // components/DestinationCard.tsx
 import React from 'react';
 import { MapPin, Star, Clock, Camera } from 'lucide-react';
-import { Destination } from '../../backend/types/destination';
-import { handleImageError } from '../../backend/utils/destinationUtils';
+import { Destination } from '../types/destination';
+import { handleImageError } from '../utils/destinationUtils';
 
 interface DestinationCardProps {
   destination: Destination;

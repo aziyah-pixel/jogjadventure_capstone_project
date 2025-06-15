@@ -1,7 +1,7 @@
 // components/DestinationList.tsx
 import React from 'react';
 import { Loader2, AlertCircle } from 'lucide-react';
-import { Destination } from '../../backend/types/destination';
+import { Destination } from '../types/destination';
 import DestinationCard from './DestinationCard';
 
 interface DestinationListProps {

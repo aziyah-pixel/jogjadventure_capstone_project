@@ -14,8 +14,8 @@ import DestinationDetail from "./DestinationDetail";
 import {
   normalizeDestination,
   handleImageError,
-} from "../../../backend/utils/destinationUtils";
-import { Destination, ApiResponse } from "../../../backend/types/destination";
+} from "../utils/destinationUtils";
+import { Destination, ApiResponse } from "../types/destination";
 
 const API_BASE_URL = "http://localhost:5000/api";
 
